@@ -43,3 +43,7 @@ server
 .*.swp
 *~
 
+/casos
+/salidas
+compare_outputs.sh
+run_tests.sh
