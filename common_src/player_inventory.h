@@ -3,19 +3,13 @@
 
 class PlayerInventory {
 public:
-    
-
     PlayerInventory(/* args */);
     ~PlayerInventory();
 };
 
-PlayerInventory::PlayerInventory(/* args */)
-{
-}
+PlayerInventory::PlayerInventory(/* args */) {}
 
-PlayerInventory::~PlayerInventory()
-{
-}
+PlayerInventory::~PlayerInventory() {}
 
 
 #endif

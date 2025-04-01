@@ -1,19 +1,18 @@
 #include "bin_protocol.h"
-#include "constants.h"
 
-#include <string>
 #include <sstream>
-#include <arpa/inet.h>
+#include <string>
 #include <vector>
 
+#include <arpa/inet.h>
 
-BinaryProtocol::BinaryProtocol(
-        const std::string& hostname,
-        const std::string& servname) :
-    hostname(hostname),
-    skt(hostname.c_str(), servname.c_str()) {}
+#include "constants.h"
 
-//client
+
+BinaryProtocol::BinaryProtocol(const std::string& hostname, const std::string& servname):
+        hostname(hostname), skt(hostname.c_str(), servname.c_str()) {}
+
+// client
 int BinaryProtocol::enter_lobby(const std::string username) {
     std::ostringstream request;
     char hello = HELLO_MSG;
@@ -37,13 +36,12 @@ int BinaryProtocol::enter_lobby(const std::string username) {
     return response_buf[1];
 }
 
-//server
-BinaryProtocol::BinaryProtocol(const std::string& servname) :
-    skt(servname.c_str()) {}
+// server
+BinaryProtocol::BinaryProtocol(const std::string& servname): skt(servname.c_str()) {}
 
 std::string BinaryProtocol::wait_for_player() {
     Socket peer_skt = skt.accept();
-    
+
     uint8_t buf[HELLO_MSG_SIZE];
     peer_skt.recvall(buf, HELLO_MSG_SIZE);
     uint16_t username_len = ntohs(*(uint16_t*)(buf + 1));
