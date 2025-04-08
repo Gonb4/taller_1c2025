@@ -33,8 +33,26 @@ uint8_t BinaryProtocol::enter_lobby(const std::string& username) {
 PlayerInventory BinaryProtocol::await_inventory_update() {
     uint8_t buf[INVENTORY_MSG_SIZE];
     skt.recvall(buf, INVENTORY_MSG_SIZE);
+    const uint8_t* i = buf + 1;
 
-    return PlayerInventory();
+    uint16_t money = ntohs(*(uint16_t*)i);
+    i += sizeof(money);
+    bool knife = (*i == KNIFE_EQUPD) ? true : false;
+    i += 1;
+    
+    uint8_t pri_code = *i;
+    i += sizeof(pri_code);
+    std::string primary = wpn_encoder.cton(pri_code);
+    uint16_t pri_ammo = ntohs(*(uint16_t*)i);
+    i += sizeof(pri_ammo);
+
+    uint8_t sec_code = *i;
+    i += sizeof(sec_code);
+    std::string secondary = wpn_encoder.cton(sec_code);
+    uint16_t sec_ammo = ntohs(*(uint16_t*)i);
+    i += sizeof(sec_ammo);
+
+    return PlayerInventory(money, knife, primary, pri_ammo, secondary, sec_ammo);
 }
 
 // server
@@ -68,10 +86,10 @@ void BinaryProtocol::send_inventory(const PlayerInventory& p_inv) {
     uint16_t money = htons(p_inv.money);
     update.write((const char*)&money, sizeof(money));
    
-    if (p_inv.knife) {
-        char k_eqp = KNIFE_EQUP;
-        update.write(&k_eqp, 1);
-    }
+    if (p_inv.knife)
+        update.put(KNIFE_EQUPD);
+    // else... (cuchillo siempre equipado)
+    
     update.put(wpn_encoder.ntoc(p_inv.primary));
     uint16_t pri_ammo = htons(p_inv.primary_ammo);
     update.write((const char*)&pri_ammo, sizeof(pri_ammo));
