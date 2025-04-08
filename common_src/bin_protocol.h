@@ -4,32 +4,32 @@
 #include <string>
 
 #include "socket.h"
+#include "weapon_encoder.h"
+#include "constants.h"
 // #include <sstream>
 
 class BinaryProtocol {
 private:
-    const std::string hostname;
-    const std::string servname;
+    // const std::string hostname;
+    // const std::string servname;
+    Socket peer_skt;
     Socket skt;
+    WeaponEncoder wpn_encoder;
 
 public:
+    // client
     BinaryProtocol(const std::string& hostname, const std::string& servname);
 
+    uint8_t enter_lobby(const std::string& username);
+    PlayerInventory await_inventory_update();
+    //request_transaction
+    
+    // server
     explicit BinaryProtocol(const std::string& servname);
 
-    // void async_get(const std::string& resource);
-    // std::string wait_response(bool include_headers=false);
-    // std::string get(const std::string& resource, bool include_headers=false);
-
-    // std::string weapon_code_to_name(int code)
-    // int weapon_name_to_code(std::string name)
-    //  switch
-
-    // client
-    int enter_lobby(const std::string username);
-
-    // server
     std::string wait_for_player();
+    void send_inventory(const PlayerInventory&);
+    //await_transaction
 
     BinaryProtocol(const BinaryProtocol&) = delete;
     BinaryProtocol& operator=(const BinaryProtocol&) = delete;
@@ -39,3 +39,8 @@ public:
 };
 
 #endif
+
+
+    // void async_get(const std::string& resource);
+    // std::string wait_response(bool include_headers=false);
+    // std::string get(const std::string& resource, bool include_headers=false);
