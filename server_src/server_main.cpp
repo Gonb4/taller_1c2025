@@ -24,6 +24,9 @@ int main(int argc, char* argv[]) {
         std::string username = protocol.wait_for_player();
         std::cout << username << " has arrived!\n";
 
+        PlayerInventory player_inv;
+        protocol.send_inventory(player_inv);
+
         // wait for player (receive username)
         // send protocol
         // setear variable protocolo
@@ -37,5 +40,5 @@ int main(int argc, char* argv[]) {
         // algo que diga si fue valida o no) if not valida print no es valida
         // send inventory update
 
-    } catch (const std::exception& err) {}
+    } catch (const std::exception& err) {std::cout << "EXCEPCION\n";}
 }

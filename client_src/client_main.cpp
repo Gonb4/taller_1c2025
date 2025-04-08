@@ -24,6 +24,10 @@ int main(int argc, char* argv[]) {
         const char* protocol_type = (p == BIN_PROTOCOL) ? "BIN_PROTOCOL" : "TXT_PROTOCOL";
         std::cout << protocol_type << "\n";
 
+        PlayerInventory player_inv = protocol.await_inventory_update();
+
+        std::cout << "money: " << player_inv.money << "\n"; //| knife: equipped | primary: not_equipped | secondary: glock, 30
+
         // enter lobby (send username)
         // receive protocol
         // setear variable protocol_type
@@ -37,5 +41,5 @@ int main(int argc, char* argv[]) {
         // receive inventory update
         // print inventory
 
-    } catch (const std::exception& err) {}
+    } catch (const std::exception& err) {std::cout << "EXCEPCION\n";}
 }
