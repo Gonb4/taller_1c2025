@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <string>
 
 #define HELLO_MSG 0x01
 #define HELLO_MSG_SIZE 3  // sin incluir username
@@ -55,6 +56,8 @@ struct PlayerInventory {
     
     PlayerInventory(uint16_t m, std::string k, std::string p, uint16_t p_ammo, std::string s, uint16_t s_ammo) :
         money(m), knife(k), primary(std::move(p)), primary_ammo(p_ammo), secondary(std::move(s)), secondary_ammo(s_ammo) {}
+
+    // std::string as_string() const {}
 };
 
 enum TransactionType {WPN_PURCHASE, AMM_PURCHASE};

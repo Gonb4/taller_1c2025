@@ -12,6 +12,7 @@
 BinaryProtocol::BinaryProtocol(const std::string& hostname, const std::string& servname):
         peer_skt(hostname.c_str(), servname.c_str()), skt(std::move(peer_skt)), wpn_encoder() {} //construyo peer_socket y lo anulo moviendolo a skt
 
+        
 uint8_t BinaryProtocol::enter_lobby(const std::string& username) {
     std::ostringstream request;
     request.put(HELLO_MSG);
@@ -58,6 +59,7 @@ PlayerInventory BinaryProtocol::await_inventory_update() {
 // server
 BinaryProtocol::BinaryProtocol(const std::string& servname):
         peer_skt(servname.c_str()), skt(std::move(peer_skt)), wpn_encoder() {} //construyo peer_socket y lo anulo moviendolo a skt
+
 
 std::string BinaryProtocol::wait_for_player() {
     this->peer_skt = skt.accept(); //revivo peer_socket

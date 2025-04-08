@@ -24,6 +24,8 @@ int main(int argc, char* argv[]) {
         std::string username = protocol.wait_for_player();
         std::cout << username << " has arrived!\n";
 
+        // WeaponShop wpn_shop;
+
         PlayerInventory player_inv;
         protocol.send_inventory(player_inv);
 

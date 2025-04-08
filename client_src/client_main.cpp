@@ -26,8 +26,18 @@ int main(int argc, char* argv[]) {
 
         PlayerInventory player_inv = protocol.await_inventory_update();
 
-        std::cout << "money: " << player_inv.money << "\n"; //| knife: equipped | primary: not_equipped | secondary: glock, 30
-
+        std::cout << "money: $"     << player_inv.money     << " | "
+                  << "knife: "      << player_inv.knife     << " | "
+                  << "primary: "    << player_inv.primary;
+        if (player_inv.primary != NOT_EQUIPPED_STR)
+            std::cout << ", " << player_inv.primary_ammo;
+        std::cout << " | "
+                  << "secondary: "  << player_inv.secondary;
+        if (player_inv.secondary != NOT_EQUIPPED_STR)
+            std::cout << ", " << player_inv.secondary_ammo;
+        std::cout << "\n";
+        // money: $500 | knife: equipped | primary: not_equipped | secondary: glock, 30
+        
         // enter lobby (send username)
         // receive protocol
         // setear variable protocol_type
