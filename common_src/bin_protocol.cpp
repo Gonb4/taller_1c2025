@@ -37,7 +37,7 @@ PlayerInventory BinaryProtocol::await_inventory_update() {
 
     uint16_t money = ntohs(*(uint16_t*)i);
     i += sizeof(money);
-    bool knife = (*i == KNIFE_EQUPD) ? true : false;
+    std::string knife = (*i == KNIFE_EQUPD) ? EQUIPPED_STR : NOT_EQUIPPED_STR;
     i += 1;
     
     uint8_t pri_code = *i;
@@ -86,7 +86,7 @@ void BinaryProtocol::send_inventory(const PlayerInventory& p_inv) {
     uint16_t money = htons(p_inv.money);
     update.write((const char*)&money, sizeof(money));
    
-    if (p_inv.knife)
+    if (p_inv.knife == EQUIPPED_STR)
         update.put(KNIFE_EQUPD);
     // else... (cuchillo siempre equipado)
     
