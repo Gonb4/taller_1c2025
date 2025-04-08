@@ -14,17 +14,12 @@ BinaryProtocol::BinaryProtocol(const std::string& hostname, const std::string& s
 
 uint8_t BinaryProtocol::enter_lobby(const std::string& username) {
     std::ostringstream request;
-    char hello = HELLO_MSG;
-    // request.put(HELLO_MSG);
-    // request.write(username.c_str(), username.size());
-    // request << 0x01 << htons(username.size()) << username;
-    request.write(&hello, 1);
+    request.put(HELLO_MSG);
 
     uint16_t username_len = htons(username.size());
     request.write(reinterpret_cast<const char*>(&username_len), sizeof(username_len));
 
     request << username;
-
 
     auto buf = request.str();
     skt.sendall(buf.data(), buf.size());
@@ -51,17 +46,15 @@ std::string BinaryProtocol::wait_for_player() {
 
     uint8_t buf[HELLO_MSG_SIZE];
     peer_skt.recvall(buf, HELLO_MSG_SIZE);
+
     uint16_t username_len = ntohs(*(uint16_t*)(buf + 1));
-    // char username[username_len];
     std::string username(username_len, '\0');
     peer_skt.recvall(username.data(), username_len);
 
     std::ostringstream response;
-    char p_msg = PROTOCOL_MSG;
-    response.write(&p_msg, 1);
-    char bin_p = BIN_PROTOCOL;
-    response.write(&bin_p, 1);
-    // response << PROTOCOL_MSG << BIN_PROTOCOL;
+    response.put(PROTOCOL_MSG);
+    response.put(BIN_PROTOCOL);
+
     auto response_buf = response.str();
     peer_skt.sendall(response_buf.data(), response_buf.size());
 
@@ -70,21 +63,20 @@ std::string BinaryProtocol::wait_for_player() {
 
 void BinaryProtocol::send_inventory(const PlayerInventory& p_inv) {
     std::ostringstream update;
-    char i_msg = INVENTORY_MSG;
-    update.write(&i_msg, 1);
+    update.put(INVENTORY_MSG);
+
     uint16_t money = htons(p_inv.money);
     update.write((const char*)&money, sizeof(money));
+   
     if (p_inv.knife) {
         char k_eqp = KNIFE_EQUP;
         update.write(&k_eqp, 1);
     }
-    char pri_code = wpn_encoder.ntoc(p_inv.primary);
-    update.write(&pri_code, 1);
+    update.put(wpn_encoder.ntoc(p_inv.primary));
     uint16_t pri_ammo = htons(p_inv.primary_ammo);
     update.write((const char*)&pri_ammo, sizeof(pri_ammo));
     
-    char sec_code = wpn_encoder.ntoc(p_inv.secondary);
-    update.write(&sec_code, 1);
+    update.put(wpn_encoder.ntoc(p_inv.secondary));
     uint16_t sec_ammo = htons(p_inv.secondary_ammo);
     update.write((const char*)&sec_ammo, sizeof(sec_ammo));
 
