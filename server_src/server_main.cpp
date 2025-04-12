@@ -2,32 +2,33 @@
 #include <exception>
 #include <iostream>
 
-#include "../common_src/bin_protocol.h"
+#include "../common_src/setup_protocol.h"
 #include "../common_src/constants.h"
-#include "../common_src/txt_protocol.h"
+#include <memory>
 
 int main(int argc, char* argv[]) {
     try {
 
         if (argc != 3) {
             std::cerr << "Bad program call. Expected " << argv[0]
-                      << " <hostname> <servname> <username>\n";
+                      << " <servname> <protocol-type>\n";
             return EXIT_FAILURE;
         }
 
         const std::string servname = argv[1];
-        // const char* p_type = argv[2];
-        // const char protocol_type = (strcmp(p_type, "binary") == 0) ? BIN_PROTOCOL : TXT_PROTOCOL;
+        const std::string protocol_type = argv[2];
+        uint8_t p_type = (protocol_type == "binary") ? BIN_PROTOCOL : TXT_PROTOCOL;
 
-        BinaryProtocol protocol(servname);
+        SetupProtocol setup_p(servname);
+        auto [protocol, username] = setup_p.wait_for_player(p_type);
+        // std::string username = setup_p.receive_username(); //ERROR aca setup_p ya no tiene el socket
 
-        std::string username = protocol.wait_for_player();
         std::cout << username << " has arrived!\n";
 
         // WeaponShop wpn_shop;
 
         PlayerInventory player_inv;
-        protocol.send_inventory(player_inv);
+        protocol->send_inventory(player_inv);
 
         // wait for player (receive username)
         // send protocol
@@ -41,6 +42,9 @@ int main(int argc, char* argv[]) {
         // pasar Transaction a: PlayerInventory? clase Shop con atributo PlayerInventory? (devolver
         // algo que diga si fue valida o no) if not valida print no es valida
         // send inventory update
+
+
+        return EXIT_SUCCESS;
 
     } catch (const std::exception& err) {std::cout << "EXCEPCION\n";}
 }

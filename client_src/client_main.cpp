@@ -1,9 +1,9 @@
 #include <exception>
 #include <iostream>
+#include <memory>
 
-#include "../common_src/bin_protocol.h"
+#include "../common_src/setup_protocol.h"
 #include "../common_src/constants.h"
-#include "../common_src/txt_protocol.h"
 
 int main(int argc, char* argv[]) {
     try {
@@ -18,13 +18,10 @@ int main(int argc, char* argv[]) {
         const std::string servname = argv[2];
         const std::string username = argv[3];
 
-        BinaryProtocol protocol(hostname, servname);
+        SetupProtocol setup_p(hostname, servname);
+        std::unique_ptr<Protocol> protocol = setup_p.request_login(username);
 
-        int p = protocol.enter_lobby(username);
-        const char* protocol_type = (p == BIN_PROTOCOL) ? "BIN_PROTOCOL" : "TXT_PROTOCOL";
-        std::cout << protocol_type << "\n";
-
-        PlayerInventory player_inv = protocol.await_inventory_update();
+        PlayerInventory player_inv = protocol->await_inventory_update();
 
         std::cout << "money: $"     << player_inv.money     << " | "
                   << "knife: "      << player_inv.knife     << " | "
@@ -51,5 +48,8 @@ int main(int argc, char* argv[]) {
         // receive inventory update
         // print inventory
 
+
+        return EXIT_SUCCESS;
+        
     } catch (const std::exception& err) {std::cout << "EXCEPCION\n";}
 }

@@ -1,36 +1,29 @@
 #ifndef BIN_PROTOCOL_H
 #define BIN_PROTOCOL_H
 
-#include <string>
+// #include <string>
 
 #include "socket.h"
 #include "weapon_encoder.h"
 #include "constants.h"
+#include "protocol.h"
 // #include <sstream>
 
-class BinaryProtocol {
+class BinaryProtocol : public Protocol {
 private:
-    // const std::string hostname;
-    // const std::string servname;
-    Socket peer_skt;
-    Socket skt;
     WeaponEncoder wpn_encoder;
 
 public:
-    // client
-    BinaryProtocol(const std::string& hostname, const std::string& servname);
+    BinaryProtocol(Socket&& s);
 
-    uint8_t enter_lobby(const std::string& username);
-    PlayerInventory await_inventory_update();
+    // client
+    PlayerInventory await_inventory_update() override;
     //request_transaction
     //request_weapon_purchase (agregar constante "buy")
     //request_ammo_purchase (agregar constante "ammo")
     
     // server
-    explicit BinaryProtocol(const std::string& servname);
-
-    std::string wait_for_player();
-    void send_inventory(const PlayerInventory&);
+    void send_inventory(const PlayerInventory&) override;
     //await_transaction (devuelve Transaction, llama a las de abajo)
     //-await_weapon_purchase (privado?)
     //-await_ammo_purchase (privado?)
@@ -40,6 +33,8 @@ public:
 
     BinaryProtocol(BinaryProtocol&&) = default;
     BinaryProtocol& operator=(BinaryProtocol&&) = default;
+
+    ~BinaryProtocol() = default;
 };
 
 #endif

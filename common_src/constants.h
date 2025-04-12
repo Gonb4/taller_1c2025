@@ -4,9 +4,11 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+// #include <memory>
 
-#define HELLO_MSG 0x01
-#define HELLO_MSG_SIZE 3  // sin incluir username
+
+#define LOGIN_MSG 0x01
+#define LOGIN_MSG_SIZE 3  // sin incluir username
 #define PROTOCOL_MSG 0x06
 #define PROTOCOL_MSG_SIZE 2
 
@@ -35,6 +37,7 @@ struct Weapon {
     const int ammo_price;
 };
 
+
 inline const std::vector<Weapon> WEAPON_LIST = {
     {NOT_EQUIPPED_STR,    0x00,   NONE,       0,      0},
     {"glock",           0x01,   SECONDARY,  100,    1},
@@ -42,6 +45,15 @@ inline const std::vector<Weapon> WEAPON_LIST = {
     {"m3",              0x03,   PRIMARY,    100,    1},
     {"awp",             0x04,   PRIMARY,    100,    1},
 };
+
+// class Protocol;
+// struct PlayerInfo {
+//     std::unique_ptr<Protocol> protocol;
+//     std::string username;
+    
+//     PlayerInfo(std::unique_ptr<Protocol>&& p, std::string&& u) :
+//         protocol(std::move(p)), username(std::move(u)) {}
+// };
 
 struct PlayerInventory {
     uint16_t money;
