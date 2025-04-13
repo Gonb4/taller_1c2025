@@ -17,18 +17,13 @@ class WeaponEncoder {
 
         std::string cton(uint8_t code) const;
     
-        // std::string weapon_code_to_name(int code)
-        // int weapon_name_to_code(std::string name)
-    
-        // client
-    
-        // server
-    
         WeaponEncoder(const WeaponEncoder&) = delete;
         WeaponEncoder& operator=(const WeaponEncoder&) = delete;
     
         WeaponEncoder(WeaponEncoder&&) = default;
         WeaponEncoder& operator=(WeaponEncoder&&) = default;
+
+        ~WeaponEncoder() = default;
     };
 
 #endif

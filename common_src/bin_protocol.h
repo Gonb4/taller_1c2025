@@ -23,6 +23,7 @@ public:
     //request_ammo_purchase (agregar constante "ammo")
     
     // server
+    bool player_disconnected() override;
     void send_inventory(const PlayerInventory&) override;
     //await_transaction (devuelve Transaction, llama a las de abajo)
     //-await_weapon_purchase (privado?)

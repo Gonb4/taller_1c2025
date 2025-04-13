@@ -4,6 +4,7 @@
 
 #include "../common_src/setup_protocol.h"
 #include "../common_src/constants.h"
+#include "../common_src/stdio_manager.h"
 #include <memory>
 
 int main(int argc, char* argv[]) {
@@ -21,15 +22,18 @@ int main(int argc, char* argv[]) {
 
         SetupProtocol setup_p(servname);
         auto [protocol, username] = setup_p.wait_for_player(p_type);
-        // std::string username = setup_p.receive_username(); //ERROR aca setup_p ya no tiene el socket
-
-        std::cout << username << " has arrived!\n";
-
+        StdIOManager stdio_mngr;
         // WeaponShop wpn_shop;
 
-        PlayerInventory player_inv;
-        protocol->send_inventory(player_inv);
-
+        stdio_mngr.print_player_welcome(username);
+        int i = 0;
+        while (!protocol->player_disconnected()) {
+            PlayerInventory player_inv;
+            protocol->send_inventory(player_inv);
+            i++;
+            if (i == 10)
+                break;
+        }
         // wait for player (receive username)
         // send protocol
         // setear variable protocolo

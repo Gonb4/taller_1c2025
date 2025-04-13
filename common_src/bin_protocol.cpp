@@ -9,7 +9,7 @@
 BinaryProtocol::BinaryProtocol(Socket&& s):
         Protocol(std::move(s)), wpn_encoder() {}
 
-        
+
 // client        
 PlayerInventory BinaryProtocol::await_inventory_update() {
     uint8_t buf[INVENTORY_MSG_SIZE];
@@ -37,6 +37,10 @@ PlayerInventory BinaryProtocol::await_inventory_update() {
 }
 
 // server
+bool BinaryProtocol::player_disconnected() {
+    return skt.is_stream_recv_closed();
+}
+
 void BinaryProtocol::send_inventory(const PlayerInventory& p_inv) {
     std::ostringstream update;
     update.put(INVENTORY_MSG);

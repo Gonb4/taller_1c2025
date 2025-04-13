@@ -4,6 +4,7 @@
 
 #include "../common_src/setup_protocol.h"
 #include "../common_src/constants.h"
+#include "../common_src/stdio_manager.h"
 
 int main(int argc, char* argv[]) {
     try {
@@ -20,19 +21,16 @@ int main(int argc, char* argv[]) {
 
         SetupProtocol setup_p(hostname, servname);
         std::unique_ptr<Protocol> protocol = setup_p.request_login(username);
+        StdIOManager stdio_mngr;
 
-        PlayerInventory player_inv = protocol->await_inventory_update();
-
-        std::cout << "money: $"     << player_inv.money     << " | "
-                  << "knife: "      << player_inv.knife     << " | "
-                  << "primary: "    << player_inv.primary;
-        if (player_inv.primary != NOT_EQUIPPED_STR)
-            std::cout << ", " << player_inv.primary_ammo;
-        std::cout << " | "
-                  << "secondary: "  << player_inv.secondary;
-        if (player_inv.secondary != NOT_EQUIPPED_STR)
-            std::cout << ", " << player_inv.secondary_ammo;
-        std::cout << "\n";
+        while (true) {
+            PlayerInventory player_inv = protocol->await_inventory_update();
+            stdio_mngr.print_inventory(player_inv);
+            auto [exit, transaction] = stdio_mngr.read_operation();
+            if (exit)
+                break;
+            std::cout << transaction.type << ", " << transaction.wpn_name << ", " << transaction.ammo_qty << "\n";
+        }
         // money: $500 | knife: equipped | primary: not_equipped | secondary: glock, 30
         
         // enter lobby (send username)

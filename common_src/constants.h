@@ -26,6 +26,10 @@
 
 inline const std::string EQUIPPED_STR = "equipped";
 inline const std::string NOT_EQUIPPED_STR = "not_equipped";
+// client commands
+inline const std::string WEAPON_PURCHASE_CMD = "buy";
+inline const std::string AMMO_PURCHASE_CMD = "ammo";
+inline const std::string EXIT_CMD = "exit";
 
 enum WeaponType {NONE, PRIMARY, SECONDARY};
 
@@ -46,14 +50,6 @@ inline const std::vector<Weapon> WEAPON_LIST = {
     {"awp",             0x04,   PRIMARY,    100,    1},
 };
 
-// class Protocol;
-// struct PlayerInfo {
-//     std::unique_ptr<Protocol> protocol;
-//     std::string username;
-    
-//     PlayerInfo(std::unique_ptr<Protocol>&& p, std::string&& u) :
-//         protocol(std::move(p)), username(std::move(u)) {}
-// };
 
 struct PlayerInventory {
     uint16_t money;
@@ -72,25 +68,31 @@ struct PlayerInventory {
     // std::string as_string() const {}
 };
 
-enum TransactionType {WPN_PURCHASE, AMM_PURCHASE};
+enum TransactionType {INVALID, WPN_PURCHASE, AMM_PURCHASE};
 
 struct Transaction {
     const TransactionType type;
-
-    Transaction(TransactionType t) : type(t) {}
-};
-
-struct WeaponPurchase : Transaction {
     const std::string wpn_name;
+    // WeaponPurchase (no tiene atributos especificos)
+    // AmmoPurchase
+    const int ammo_qty;
 
-    WeaponPurchase(const std::string& wp_name) : Transaction(WPN_PURCHASE), wpn_name(wp_name) {}
+    Transaction() :
+        type(INVALID), wpn_name(""), ammo_qty(0) {}
+
+    protected:
+    Transaction(TransactionType t, const std::string&& w_n, int a_q) :
+        type(t), wpn_name(std::move(w_n)), ammo_qty(a_q) {}
 };
 
-struct AmmoPurchase : Transaction {
-    const WeaponType wpn_type;
-    const int amount;
+struct WeaponPurchase : public Transaction {
+    WeaponPurchase(const std::string&& wp_name) :
+        Transaction(WPN_PURCHASE, std::move(wp_name), 0) {}
+};
 
-    AmmoPurchase(WeaponType wp_type, int amount) : Transaction(AMM_PURCHASE), wpn_type(wp_type), amount(amount) {}
+struct AmmoPurchase : public Transaction {
+    AmmoPurchase(const std::string&& wp_name, int ammo_qty) :
+        Transaction(AMM_PURCHASE, std::move(wp_name), ammo_qty) {}
 };
 
 #endif
