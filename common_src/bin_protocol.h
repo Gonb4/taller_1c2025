@@ -18,8 +18,8 @@ private:
     void request_ammo_purchase(const Transaction& t);
 
     //server
-    Transaction await_weapon_purchase();
-    Transaction await_ammo_purchase();
+    std::pair<bool, Transaction> await_weapon_purchase();
+    std::pair<bool, Transaction> await_ammo_purchase();
 
 public:
     BinaryProtocol(Socket&& s);
@@ -31,7 +31,7 @@ public:
 
     // server
     void send_inventory(const PlayerInventory&) override;
-    Transaction await_transaction() override;
+    std::pair<bool, Transaction> await_transaction() override;
 
 
     BinaryProtocol(const BinaryProtocol&) = delete;

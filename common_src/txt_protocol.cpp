@@ -30,14 +30,14 @@ void TextProtocol::send_inventory(const PlayerInventory&) {
 
 }
 
-Transaction TextProtocol::await_transaction() {
-    return Transaction();
+std::pair<bool, Transaction> TextProtocol::await_transaction() {
+    return {true, Transaction()};
 }
 
-Transaction TextProtocol::await_weapon_purchase() {
-    return Transaction();
+std::pair<bool, Transaction> TextProtocol::await_weapon_purchase() {
+    return {true, Transaction()};
 }
 
-Transaction TextProtocol::await_ammo_purchase() {
-    return Transaction();
+std::pair<bool, Transaction> TextProtocol::await_ammo_purchase() {
+    return {true, Transaction()};
 }

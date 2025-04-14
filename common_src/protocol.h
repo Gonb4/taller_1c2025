@@ -22,7 +22,7 @@ public:
     
     // server
     virtual void send_inventory(const PlayerInventory&) = 0;
-    virtual Transaction await_transaction() = 0;
+    virtual std::pair<bool, Transaction> await_transaction() = 0;
 
 
     Protocol(const Protocol&) = delete;

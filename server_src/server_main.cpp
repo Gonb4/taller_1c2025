@@ -27,10 +27,12 @@ int main(int argc, char* argv[]) {
 
         stdio_mngr.print_player_welcome(username);
 
-        while (!protocol->disconnected()) {
+        while (not protocol->disconnected()) {
             PlayerInventory player_inv;
             protocol->send_inventory(player_inv);
-            Transaction transaction = protocol->await_transaction();
+            auto [player_exit, transaction] = protocol->await_transaction();
+            if (player_exit)
+                break;
             std::cout << transaction.type << ", " << transaction.wpn_name << ", " << transaction.wpn_type << ", " << transaction.ammo_qty << "\n";
         }
         // wait for player (receive username)

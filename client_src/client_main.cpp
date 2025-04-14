@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
         std::unique_ptr<Protocol> protocol = setup_p.request_login(username);
         StdIOManager stdio_mngr;
 
-        while (!protocol->disconnected()) {
+        while (not protocol->disconnected()) {
             PlayerInventory player_inv = protocol->await_inventory_update();
             stdio_mngr.print_inventory(player_inv);
             auto [exit, transaction] = stdio_mngr.read_operation(player_inv);

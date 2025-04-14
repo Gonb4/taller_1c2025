@@ -18,7 +18,8 @@ bool BinaryProtocol::disconnected() {
 // client        
 PlayerInventory BinaryProtocol::await_inventory_update() {
     uint8_t buf[INVENTORY_MSG_SIZE];
-    skt.recvall(buf, INVENTORY_MSG_SIZE);
+    if (not skt.recvall(buf, INVENTORY_MSG_SIZE))
+        throw LibError(errno, "Server disconnected unexpectedly");
     const uint8_t* i = buf + 1;
 
     uint16_t money = ntohs(*(uint16_t*)i);
@@ -56,7 +57,8 @@ void BinaryProtocol::request_weapon_purchase(const Transaction& t) {
     request.put(wpn_encoder.ntoc(t.wpn_name)); // si t.wpn_name es invalido el code es 0x00 (arma NOT_EQUIPPED_STR)
 
     auto buf = request.str();
-    skt.sendall(buf.data(), buf.size());
+    if (not skt.sendall(buf.data(), buf.size()))
+        throw LibError(errno, "Server disconnected unexpectedly");
 }
 
 void BinaryProtocol::request_ammo_purchase(const Transaction& t) {
@@ -68,7 +70,8 @@ void BinaryProtocol::request_ammo_purchase(const Transaction& t) {
     request.write((const char*)&amount, sizeof(amount));
 
     auto buf = request.str();
-    skt.sendall(buf.data(), buf.size());
+    if (not skt.sendall(buf.data(), buf.size()))
+        throw LibError(errno, "Server disconnected unexpectedly");
 }
 
 // server
@@ -92,12 +95,14 @@ void BinaryProtocol::send_inventory(const PlayerInventory& p_inv) {
     update.write((const char*)&sec_ammo, sizeof(sec_ammo));
 
     auto buf = update.str();
-    skt.sendall(buf.data(), buf.size());
+    if (not skt.sendall(buf.data(), buf.size()))
+        throw LibError(errno, "Player disconnected unexpectedly");
 }
 
-Transaction BinaryProtocol::await_transaction() {
+std::pair<bool, Transaction> BinaryProtocol::await_transaction() {
     uint8_t type;
-    skt.recvall(&type, 1);
+    if (not skt.recvall(&type, 1))
+        return {true, Transaction()};
 
     if (type == WEAPON_PURCHASE_MSG)
         return await_weapon_purchase();
@@ -105,21 +110,23 @@ Transaction BinaryProtocol::await_transaction() {
         return await_ammo_purchase();
 }
 
-Transaction BinaryProtocol::await_weapon_purchase() {
+std::pair<bool, Transaction> BinaryProtocol::await_weapon_purchase() {
     uint8_t buf[WEAPON_PURCHASE_MSG_SIZE - 1];
-    skt.recvall(buf, WEAPON_PURCHASE_MSG_SIZE - 1);
+    if (not skt.recvall(buf, WEAPON_PURCHASE_MSG_SIZE - 1))
+        return {true, Transaction()};
 
     uint8_t wpn_code = *buf;
 
-    return WeaponPurchase(wpn_encoder.cton(wpn_code));
+    return {false, WeaponPurchase(wpn_encoder.cton(wpn_code))};
 }
 
-Transaction BinaryProtocol::await_ammo_purchase() {
+std::pair<bool, Transaction> BinaryProtocol::await_ammo_purchase() {
     uint8_t buf[AMMO_PURCHASE_MSG_SIZE - 1];
-    skt.recvall(buf, AMMO_PURCHASE_MSG_SIZE - 1);
+    if (not skt.recvall(buf, AMMO_PURCHASE_MSG_SIZE - 1))
+        return {true, Transaction()};
 
     WeaponType wpn_type = (WeaponType)*buf;
     uint16_t amount = ntohs(*(uint16_t*)(buf+1));
 
-    return AmmoPurchase(wpn_type, amount);
+    return {false, AmmoPurchase(wpn_type, amount)};
 }
