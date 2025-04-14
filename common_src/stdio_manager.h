@@ -10,7 +10,7 @@ class StdIOManager {
 private:
     // client
     std::pair<bool, Transaction> read_weapon_purchase(std::istringstream& iss);
-    std::pair<bool, Transaction> read_ammo_purchase(std::istringstream& iss);
+    std::pair<bool, Transaction> read_ammo_purchase(std::istringstream& iss, const PlayerInventory& p_inv);
 
     // server
     void print_invalid_weapon_purchase();
@@ -20,8 +20,8 @@ public:
     StdIOManager();
 
     // client
-    void print_inventory(PlayerInventory& p_inv);
-    std::pair<bool, Transaction> read_operation();
+    void print_inventory(const PlayerInventory& p_inv);
+    std::pair<bool, Transaction> read_operation(const PlayerInventory& p_inv);
 
     //request_transaction
     //request_weapon_purchase (agregar constante "buy")

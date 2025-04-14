@@ -9,7 +9,10 @@ WeaponEncoder::WeaponEncoder() {
 }
     
 uint8_t WeaponEncoder::ntoc(const std::string& name) const {
-    return name_to_code.at(name);
+    if (name_to_code.count(name))
+        return name_to_code.at(name);
+    else
+        return name_to_code.at(NOT_EQUIPPED_STR);
 }
 
 std::string WeaponEncoder::cton(uint8_t code) const {

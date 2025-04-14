@@ -10,22 +10,26 @@
 
 class TextProtocol : public Protocol {
 private:
+    //client
+    void request_weapon_purchase(const Transaction& t);
+    void request_ammo_purchase(const Transaction& t);
+
+    //server
+    Transaction await_weapon_purchase();
+    Transaction await_ammo_purchase();
 
 public:
     TextProtocol(Socket&& s);
+    bool disconnected() override;
 
     // client
     PlayerInventory await_inventory_update() override;
-    //request_transaction
-    //request_weapon_purchase (agregar constante "buy")
-    //request_ammo_purchase (agregar constante "ammo")
+    void request_transaction(const Transaction& t) override;
     
     // server
-    bool player_disconnected() override;
     void send_inventory(const PlayerInventory&) override;
-    //await_transaction (devuelve Transaction, llama a las de abajo)
-    //-await_weapon_purchase (privado?)
-    //-await_ammo_purchase (privado?)
+    Transaction await_transaction() override;
+
 
     TextProtocol(const TextProtocol&) = delete;
     TextProtocol& operator=(const TextProtocol&) = delete;

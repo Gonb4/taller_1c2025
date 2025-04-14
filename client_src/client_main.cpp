@@ -23,13 +23,13 @@ int main(int argc, char* argv[]) {
         std::unique_ptr<Protocol> protocol = setup_p.request_login(username);
         StdIOManager stdio_mngr;
 
-        while (true) {
+        while (!protocol->disconnected()) {
             PlayerInventory player_inv = protocol->await_inventory_update();
             stdio_mngr.print_inventory(player_inv);
-            auto [exit, transaction] = stdio_mngr.read_operation();
+            auto [exit, transaction] = stdio_mngr.read_operation(player_inv);
             if (exit)
                 break;
-            std::cout << transaction.type << ", " << transaction.wpn_name << ", " << transaction.ammo_qty << "\n";
+            protocol->request_transaction(transaction);
         }
         // money: $500 | knife: equipped | primary: not_equipped | secondary: glock, 30
         

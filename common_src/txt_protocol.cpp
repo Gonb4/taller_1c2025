@@ -4,16 +4,40 @@ TextProtocol::TextProtocol(Socket&& s):
         Protocol(std::move(s)) {}
 
 
+bool TextProtocol::disconnected() {
+    return skt.is_stream_recv_closed();
+}
+
 // client
 PlayerInventory TextProtocol::await_inventory_update() {
     return PlayerInventory();
 }
 
-// server
-bool TextProtocol::player_disconnected() {
-    return skt.is_stream_recv_closed();
+void TextProtocol::request_transaction(const Transaction& t) {
+
 }
 
+void TextProtocol::request_weapon_purchase(const Transaction& t) {
+
+} //(agregar constante "buy")
+
+void TextProtocol::request_ammo_purchase(const Transaction& t) {
+    
+} //(agregar constante "ammo")
+
+// server
 void TextProtocol::send_inventory(const PlayerInventory&) {
 
+}
+
+Transaction TextProtocol::await_transaction() {
+    return Transaction();
+}
+
+Transaction TextProtocol::await_weapon_purchase() {
+    return Transaction();
+}
+
+Transaction TextProtocol::await_ammo_purchase() {
+    return Transaction();
 }

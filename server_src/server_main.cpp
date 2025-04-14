@@ -26,13 +26,12 @@ int main(int argc, char* argv[]) {
         // WeaponShop wpn_shop;
 
         stdio_mngr.print_player_welcome(username);
-        int i = 0;
-        while (!protocol->player_disconnected()) {
+
+        while (!protocol->disconnected()) {
             PlayerInventory player_inv;
             protocol->send_inventory(player_inv);
-            i++;
-            if (i == 10)
-                break;
+            Transaction transaction = protocol->await_transaction();
+            std::cout << transaction.type << ", " << transaction.wpn_name << ", " << transaction.wpn_type << ", " << transaction.ammo_qty << "\n";
         }
         // wait for player (receive username)
         // send protocol

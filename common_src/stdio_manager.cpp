@@ -6,7 +6,7 @@
 StdIOManager::StdIOManager() {}
 
 // client
-void StdIOManager::print_inventory(PlayerInventory& p_inv) {
+void StdIOManager::print_inventory(const PlayerInventory& p_inv) {
     std::ostringstream inv_msg;
 
     inv_msg << "money: $"     << p_inv.money     << " | "
@@ -23,7 +23,7 @@ void StdIOManager::print_inventory(PlayerInventory& p_inv) {
     std::cout << inv_msg.str();
 }
 
-std::pair<bool, Transaction> StdIOManager::read_operation() {
+std::pair<bool, Transaction> StdIOManager::read_operation(const PlayerInventory& p_inv) {
     std::string line;
     std::string command;
 
@@ -37,7 +37,7 @@ std::pair<bool, Transaction> StdIOManager::read_operation() {
             if (valid)
                 return {false, t};
         } else if (command == AMMO_PURCHASE_CMD) {
-            auto [valid, t] = read_ammo_purchase(iss);
+            auto [valid, t] = read_ammo_purchase(iss, p_inv);
             if (valid)
                 return {false, t};
         } else if (command == EXIT_CMD) {
@@ -49,18 +49,22 @@ std::pair<bool, Transaction> StdIOManager::read_operation() {
 std::pair<bool, Transaction> StdIOManager::read_weapon_purchase(std::istringstream& iss) {
     std::string wpn_name;
 
-    if (iss >> wpn_name) // chequea que haya al menos 1 palabra mas
+    if ((iss >> wpn_name) && wpn_name != NOT_EQUIPPED_STR) // chequea que haya al menos 1 palabra mas
         return {true, WeaponPurchase(std::move(wpn_name))};
 
     return {false, Transaction()};
 }
 
-std::pair<bool, Transaction> StdIOManager::read_ammo_purchase(std::istringstream& iss) {
+std::pair<bool, Transaction> StdIOManager::read_ammo_purchase(std::istringstream& iss, const PlayerInventory& p_inv) {
     std::string wpn_name;
     int amount;
 
-    if (iss >> wpn_name >> amount) // chequea que haya al menos 2 palabras mas y la 2da debe poder guardarse como int
-        return {true, AmmoPurchase(std::move(wpn_name), amount)};
+    if ((iss >> wpn_name >> amount) && amount > 0 && amount < MAX_AMMO && wpn_name != NOT_EQUIPPED_STR) { // chequea que haya al menos 2 palabras mas y la 2da debe poder guardarse como int
+        if (wpn_name == p_inv.primary)
+            return {true, AmmoPurchase(PRIMARY, amount)};
+        if (wpn_name == p_inv.secondary)
+            return {true, AmmoPurchase(SECONDARY, amount)};
+    }
 
     return {false, Transaction()};
 }

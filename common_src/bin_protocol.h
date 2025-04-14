@@ -13,21 +13,26 @@ class BinaryProtocol : public Protocol {
 private:
     WeaponEncoder wpn_encoder;
 
+    //client
+    void request_weapon_purchase(const Transaction& t);
+    void request_ammo_purchase(const Transaction& t);
+
+    //server
+    Transaction await_weapon_purchase();
+    Transaction await_ammo_purchase();
+
 public:
     BinaryProtocol(Socket&& s);
+    bool disconnected() override;
 
     // client
     PlayerInventory await_inventory_update() override;
-    //request_transaction
-    //request_weapon_purchase (agregar constante "buy")
-    //request_ammo_purchase (agregar constante "ammo")
-    
+    void request_transaction(const Transaction& t) override;
+
     // server
-    bool player_disconnected() override;
     void send_inventory(const PlayerInventory&) override;
-    //await_transaction (devuelve Transaction, llama a las de abajo)
-    //-await_weapon_purchase (privado?)
-    //-await_ammo_purchase (privado?)
+    Transaction await_transaction() override;
+
 
     BinaryProtocol(const BinaryProtocol&) = delete;
     BinaryProtocol& operator=(const BinaryProtocol&) = delete;
@@ -39,8 +44,3 @@ public:
 };
 
 #endif
-
-
-    // void async_get(const std::string& resource);
-    // std::string wait_response(bool include_headers=false);
-    // std::string get(const std::string& resource, bool include_headers=false);

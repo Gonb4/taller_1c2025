@@ -16,13 +16,16 @@
 #define TXT_PROTOCOL 0x08
 
 #define WEAPON_PURCHASE_MSG 0x02
+#define WEAPON_PURCHASE_MSG_SIZE 2
 #define AMMO_PURCHASE_MSG 0x03
+#define AMMO_PURCHASE_MSG_SIZE 4
 #define INVENTORY_MSG 0x07
 #define INVENTORY_MSG_SIZE 10
 
 #define STARTING_AMMO 30
 #define KNIFE_EQUPD 0x01
 // #define KNIFE_UNEQUP (cuchillo siempre equipado)
+#define MAX_AMMO UINT16_MAX
 
 inline const std::string EQUIPPED_STR = "equipped";
 inline const std::string NOT_EQUIPPED_STR = "not_equipped";
@@ -31,7 +34,7 @@ inline const std::string WEAPON_PURCHASE_CMD = "buy";
 inline const std::string AMMO_PURCHASE_CMD = "ammo";
 inline const std::string EXIT_CMD = "exit";
 
-enum WeaponType {NONE, PRIMARY, SECONDARY};
+enum WeaponType {NONE, PRIMARY = 0x01, SECONDARY = 0x02};
 
 struct Weapon {
     const std::string name;
@@ -72,27 +75,28 @@ enum TransactionType {INVALID, WPN_PURCHASE, AMM_PURCHASE};
 
 struct Transaction {
     const TransactionType type;
+    // WeaponPurchase
     const std::string wpn_name;
-    // WeaponPurchase (no tiene atributos especificos)
     // AmmoPurchase
-    const int ammo_qty;
+    const WeaponType wpn_type;
+    const uint16_t ammo_qty;
 
     Transaction() :
-        type(INVALID), wpn_name(""), ammo_qty(0) {}
+        type(INVALID), wpn_name(""), wpn_type(NONE), ammo_qty(0) {}
 
     protected:
-    Transaction(TransactionType t, const std::string&& w_n, int a_q) :
-        type(t), wpn_name(std::move(w_n)), ammo_qty(a_q) {}
+    Transaction(TransactionType t, const std::string&& w_n, WeaponType w_t, uint16_t a_q) :
+        type(t), wpn_name(std::move(w_n)), wpn_type(w_t), ammo_qty(a_q) {}
 };
 
 struct WeaponPurchase : public Transaction {
     WeaponPurchase(const std::string&& wp_name) :
-        Transaction(WPN_PURCHASE, std::move(wp_name), 0) {}
+        Transaction(WPN_PURCHASE, std::move(wp_name), NONE, 0) {}
 };
 
 struct AmmoPurchase : public Transaction {
-    AmmoPurchase(const std::string&& wp_name, int ammo_qty) :
-        Transaction(AMM_PURCHASE, std::move(wp_name), ammo_qty) {}
+    AmmoPurchase(WeaponType wp_type, uint16_t ammo_qty) :
+        Transaction(AMM_PURCHASE, "", wp_type, ammo_qty) {}
 };
 
 #endif
