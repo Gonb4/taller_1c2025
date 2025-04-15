@@ -2,7 +2,7 @@
 #define CONSTANTS_H
 
 #include <cstdint>
-#include <vector>
+#include <unordered_map>
 #include <string>
 // #include <memory>
 
@@ -34,6 +34,9 @@ inline const std::string WEAPON_PURCHASE_CMD = "buy";
 inline const std::string AMMO_PURCHASE_CMD = "ammo";
 inline const std::string EXIT_CMD = "exit";
 
+inline const std::string WPN_PCHS_REJECTED_STR = "Not enough money to buy weapon";
+inline const std::string AMM_PCHS_REJECTED_STR = "Not enough money to buy ammo";
+
 enum WeaponType {NONE, PRIMARY = 0x01, SECONDARY = 0x02};
 
 struct Weapon {
@@ -45,12 +48,12 @@ struct Weapon {
 };
 
 
-inline const std::vector<Weapon> WEAPON_LIST = {
-    {NOT_EQUIPPED_STR,    0x00,   NONE,       0,      0},
-    {"glock",           0x01,   SECONDARY,  100,    1},
-    {"ak-47",           0x02,   PRIMARY,    100,    1},
-    {"m3",              0x03,   PRIMARY,    100,    1},
-    {"awp",             0x04,   PRIMARY,    100,    1},
+inline const std::unordered_map<std::string, Weapon> WEAPON_MAP = {
+    {NOT_EQUIPPED_STR,  {NOT_EQUIPPED_STR,  0x00,   NONE,       0,      0}},
+    {"glock",           {"glock",           0x01,   SECONDARY,  100,    1}},
+    {"ak-47",           {"ak-47",           0x02,   PRIMARY,    100,    1}},
+    {"m3",              {"m3",              0x03,   PRIMARY,    100,    1}},
+    {"awp",             {"awp",             0x04,   PRIMARY,    100,    1}},
 };
 
 

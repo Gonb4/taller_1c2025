@@ -2,7 +2,7 @@
 #include "constants.h"
 
 WeaponEncoder::WeaponEncoder() {
-    for (const Weapon& w : WEAPON_LIST) {
+    for (const auto& [n, w] : WEAPON_MAP) {
         name_to_code[w.name] = w.code;
         code_to_name[w.code] = w.name;
     }

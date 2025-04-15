@@ -13,8 +13,8 @@ private:
     std::pair<bool, Transaction> read_ammo_purchase(std::istringstream& iss, const PlayerInventory& p_inv);
 
     // server
-    void print_invalid_weapon_purchase();
-    void print_invalid_ammo_purchase();
+    void print_weapon_purchase_rejected(const Transaction& t);
+    void print_ammo_purchase_rejected(const Transaction& t);
 
 public:
     StdIOManager();
@@ -22,17 +22,11 @@ public:
     // client
     void print_inventory(const PlayerInventory& p_inv);
     std::pair<bool, Transaction> read_operation(const PlayerInventory& p_inv);
-
-    //request_transaction
-    //request_weapon_purchase (agregar constante "buy")
-    //request_ammo_purchase (agregar constante "ammo")
     
     // server
     void print_player_welcome(std::string& username);
-    void print_invalid_transaction();
-    //await_transaction (devuelve Transaction, llama a las de abajo)
-    //-await_weapon_purchase (privado?)
-    //-await_ammo_purchase (privado?)
+    void print_transaction_rejected(const Transaction& t);
+
 
     StdIOManager(const StdIOManager&) = delete;
     StdIOManager& operator=(const StdIOManager&) = delete;

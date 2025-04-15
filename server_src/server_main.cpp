@@ -5,6 +5,7 @@
 #include "../common_src/setup_protocol.h"
 #include "../common_src/constants.h"
 #include "../common_src/stdio_manager.h"
+#include "weapon_shop.h"
 #include <memory>
 
 int main(int argc, char* argv[]) {
@@ -23,17 +24,21 @@ int main(int argc, char* argv[]) {
         SetupProtocol setup_p(servname);
         auto [protocol, username] = setup_p.wait_for_player(p_type);
         StdIOManager stdio_mngr;
-        // WeaponShop wpn_shop;
+        WeaponShop wpn_shop;
 
         stdio_mngr.print_player_welcome(username);
 
         while (not protocol->disconnected()) {
-            PlayerInventory player_inv;
+            PlayerInventory player_inv = wpn_shop.get_player_inventory();
             protocol->send_inventory(player_inv);
             auto [player_exit, transaction] = protocol->await_transaction();
             if (player_exit)
                 break;
-            std::cout << transaction.type << ", " << transaction.wpn_name << ", " << transaction.wpn_type << ", " << transaction.ammo_qty << "\n";
+            bool transaction_confirmed = wpn_shop.process_transaction(transaction);
+            if (not transaction_confirmed)
+                stdio_mngr.print_transaction_rejected(transaction);
+
+            // std::cout << transaction.type << ", " << transaction.wpn_name << ", " << transaction.wpn_type << ", " << transaction.ammo_qty << "\n";
         }
         // wait for player (receive username)
         // send protocol
