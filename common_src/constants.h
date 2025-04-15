@@ -27,8 +27,24 @@
 // #define KNIFE_UNEQUP (cuchillo siempre equipado)
 #define MAX_AMMO UINT16_MAX
 
+#define MAX_TXT_PROTOCOL_MSG_LEN 256
+#define N_LINES_INVENTORY_MSG 4
+#define N_LINES_TRANSACTION_MSG 1
+
+inline const std::string TRUE_STR = "true";
+inline const std::string FALSE_STR = "false";
+inline const std::string WEAPON_PURCHASE_STR = "buy.weapon";
+inline const std::string AMMO_PURCHASE_STR = "buy.ammo.";
+inline const std::string PRIMARY_STR = "primary";
+inline const std::string SECONDARY_STR = "secondary";
+inline const std::string INV_MONEY_STR = "equipment.money";
+inline const std::string INV_KNIFE_STR = "equipment.knife";
+inline const std::string INV_PRIMARY_STR = "equipment.primary";
+inline const std::string INV_SECONDARY_STR = "equipment.secondary";
+
 inline const std::string EQUIPPED_STR = "equipped";
 inline const std::string NOT_EQUIPPED_STR = "not_equipped";
+inline const std::string NO_WEAPON_STR = "none";
 // client commands
 inline const std::string WEAPON_PURCHASE_CMD = "buy";
 inline const std::string AMMO_PURCHASE_CMD = "ammo";
@@ -49,11 +65,11 @@ struct Weapon {
 
 
 inline const std::unordered_map<std::string, Weapon> WEAPON_MAP = {
-    {NOT_EQUIPPED_STR,  {NOT_EQUIPPED_STR,  0x00,   NONE,       0,      0}},
-    {"glock",           {"glock",           0x01,   SECONDARY,  100,    1}},
-    {"ak-47",           {"ak-47",           0x02,   PRIMARY,    100,    1}},
-    {"m3",              {"m3",              0x03,   PRIMARY,    100,    1}},
-    {"awp",             {"awp",             0x04,   PRIMARY,    100,    1}},
+    {NO_WEAPON_STR, {NO_WEAPON_STR, 0x00,   NONE,       0,      0}},
+    {"glock",       {"glock",       0x01,   SECONDARY,  100,    1}},
+    {"ak-47",       {"ak-47",       0x02,   PRIMARY,    100,    1}},
+    {"m3",          {"m3",          0x03,   PRIMARY,    100,    1}},
+    {"awp",         {"awp",         0x04,   PRIMARY,    100,    1}},
 };
 
 
@@ -66,7 +82,7 @@ struct PlayerInventory {
     uint16_t secondary_ammo;
 
     PlayerInventory() :
-        money(500), knife(EQUIPPED_STR), primary(NOT_EQUIPPED_STR), primary_ammo(0), secondary("glock"), secondary_ammo(STARTING_AMMO) {}
+        money(500), knife(EQUIPPED_STR), primary(NO_WEAPON_STR), primary_ammo(0), secondary("glock"), secondary_ammo(STARTING_AMMO) {}
     
     PlayerInventory(uint16_t m, std::string k, std::string p, uint16_t p_ammo, std::string s, uint16_t s_ammo) :
         money(m), knife(k), primary(std::move(p)), primary_ammo(p_ammo), secondary(std::move(s)), secondary_ammo(s_ammo) {}
