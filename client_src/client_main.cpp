@@ -31,7 +31,7 @@ int main(int argc, const char* argv[]) {
                 break;
             protocol->request_transaction(transaction);
         }
-        
+
         return EXIT_SUCCESS;
 
     } catch (const std::exception& err) {

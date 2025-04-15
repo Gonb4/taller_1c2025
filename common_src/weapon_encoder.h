@@ -5,6 +5,11 @@
 #include <string>
 #include <unordered_map>
 
+/**
+ * @brief Clase encargada de codificar y decodificar armas.
+ * 
+ * Asocia nombres de armas con sus códigos numéricos y viceversa.
+ */
 class WeaponEncoder {
 private:
     std::unordered_map<std::string, uint8_t> name_to_code;
@@ -13,8 +18,20 @@ private:
 public:
     WeaponEncoder();
 
+    /**
+     * @brief Convierte el nombre de un arma a su código.
+     * 
+     * @param name Nombre del arma.
+     * @return Código correspondiente. Si el nombre del arma no existe devuelve el código asociado a NO_WEAPON_STR (0x00)
+     */
     uint8_t ntoc(const std::string& name) const;
 
+    /**
+     * @brief Convierte un código de arma a su nombre.
+     * 
+     * @param code Código del arma.
+     * @return Nombre correspondiente.
+     */
     std::string cton(uint8_t code) const;
 
     WeaponEncoder(const WeaponEncoder&) = delete;
