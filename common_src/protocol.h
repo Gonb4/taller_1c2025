@@ -22,7 +22,7 @@ protected:
 public:
     /**
      * @brief Indica si el socket fue desconectado.
-     * 
+     *
      * @return true si el socket fue cerrado; false en caso contrario.
      */
     virtual bool disconnected() = 0;
@@ -31,7 +31,7 @@ public:
 
     /**
      * @brief Espera una actualización del inventario del jugador.
-     * 
+     *
      * @throws LibError si el socket se cierra inesperadamente.
      * @return PlayerInventory actualizado.
      */
@@ -39,7 +39,7 @@ public:
 
     /**
      * @brief Solicita una transacción al servidor.
-     * 
+     *
      * @param t Transacción a enviar.
      * @throws LibError si la transacción es de tipo TransactionType::INVALID.
      */
@@ -49,7 +49,7 @@ public:
 
     /**
      * @brief Envía el inventario del jugador al cliente.
-     * 
+     *
      * @param p_inv Inventario a enviar.
      * @throws LibError si el socket se cierra inesperadamente.
      */
@@ -57,9 +57,10 @@ public:
 
     /**
      * @brief Espera una transacción del cliente.
-     * 
+     *
      * @return Un par:
-     *         - `true` y una transacción de tipo `TransactionType::INVALID` si el cliente eligió salir del juego
+     *         - `true` y una transacción de tipo `TransactionType::INVALID` si el cliente eligió
+     * salir del juego
      *         - `false` y una transacción válida en caso contrario.
      */
     virtual std::pair<bool, Transaction> await_transaction() = 0;

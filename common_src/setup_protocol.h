@@ -39,7 +39,8 @@ public:
     /**
      * @brief Espera la conexión de un cliente y lo acepta.
      * @param p_type Tipo de protocolo a utilizar (BIN_PROTOCOL o TXT_PROTOCOL).
-     * @return Un par con un std::unique_ptr<Protocol> al protocolo correspondiente y el nombre de usuario recibido.
+     * @return Un par con un std::unique_ptr<Protocol> al protocolo correspondiente y el nombre de
+     * usuario recibido.
      */
     std::pair<std::unique_ptr<Protocol>, std::string> wait_for_player(const uint8_t p_type);
 
