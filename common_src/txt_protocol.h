@@ -1,30 +1,33 @@
 #ifndef TXT_PROTOCOL_H
 #define TXT_PROTOCOL_H
 
-#include "socket.h"
-#include "protocol.h"
-#include "constants.h"
+#include <string>
+#include <utility>
 
-class TextProtocol : public Protocol {
+#include "constants.h"
+#include "protocol.h"
+#include "socket.h"
+
+class TextProtocol: public Protocol {
 private:
     std::istringstream receive_message(int n);
 
-    //client
+    // client
     void request_weapon_purchase(const Transaction& t);
     void request_ammo_purchase(const Transaction& t);
 
-    //server
+    // server
     std::pair<bool, Transaction> await_weapon_purchase(const std::string& line);
     std::pair<bool, Transaction> await_ammo_purchase(const std::string& line);
 
 public:
-    TextProtocol(Socket&& s);
+    explicit TextProtocol(Socket&& s);
     bool disconnected() override;
 
     // client
     PlayerInventory await_inventory_update() override;
     void request_transaction(const Transaction& t) override;
-    
+
     // server
     void send_inventory(const PlayerInventory& p_inv) override;
     std::pair<bool, Transaction> await_transaction() override;

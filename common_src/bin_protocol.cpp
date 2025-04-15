@@ -2,20 +2,19 @@
 
 #include <sstream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <arpa/inet.h>
+
 #include "liberror.h"
 
-BinaryProtocol::BinaryProtocol(Socket&& s):
-        Protocol(std::move(s)), wpn_encoder() {}
+BinaryProtocol::BinaryProtocol(Socket&& s): Protocol(std::move(s)), wpn_encoder() {}
 
 
-bool BinaryProtocol::disconnected() {
-    return skt.is_stream_recv_closed();
-}
+bool BinaryProtocol::disconnected() { return skt.is_stream_recv_closed(); }
 
-// client        
+// client
 PlayerInventory BinaryProtocol::await_inventory_update() {
     uint8_t buf[INVENTORY_MSG_SIZE];
     if (not skt.recvall(buf, INVENTORY_MSG_SIZE))
@@ -26,7 +25,7 @@ PlayerInventory BinaryProtocol::await_inventory_update() {
     i += sizeof(money);
     std::string knife = (*i == KNIFE_EQUPD) ? EQUIPPED_STR : NOT_EQUIPPED_STR;
     i += 1;
-    
+
     uint8_t pri_code = *i;
     i += sizeof(pri_code);
     std::string primary = wpn_encoder.cton(pri_code);
@@ -47,14 +46,15 @@ void BinaryProtocol::request_transaction(const Transaction& t) {
         request_weapon_purchase(t);
     else if (t.type == AMM_PURCHASE)
         request_ammo_purchase(t);
-    else // t.type == TransactionType::INVALID
+    else  // t.type == TransactionType::INVALID
         throw LibError(errno, "Invalid Transaction used for parameter 't' in request_transaction");
 }
 
 void BinaryProtocol::request_weapon_purchase(const Transaction& t) {
     std::ostringstream request;
     request.put(WEAPON_PURCHASE_MSG);
-    request.put(wpn_encoder.ntoc(t.wpn_name)); // si t.wpn_name es invalido el code es 0x00 (arma NO_WEAPON_STR)
+    request.put(wpn_encoder.ntoc(
+            t.wpn_name));  // si t.wpn_name es invalido el code es 0x00 (arma NO_WEAPON_STR)
 
     auto buf = request.str();
     if (not skt.sendall(buf.data(), buf.size()))
@@ -81,15 +81,15 @@ void BinaryProtocol::send_inventory(const PlayerInventory& p_inv) {
 
     uint16_t money = htons(p_inv.money);
     update.write((const char*)&money, sizeof(money));
-   
+
     if (p_inv.knife == EQUIPPED_STR)
         update.put(KNIFE_EQUPD);
     // else... (cuchillo siempre equipado)
-    
+
     update.put(wpn_encoder.ntoc(p_inv.primary));
     uint16_t pri_ammo = htons(p_inv.primary_ammo);
     update.write((const char*)&pri_ammo, sizeof(pri_ammo));
-    
+
     update.put(wpn_encoder.ntoc(p_inv.secondary));
     uint16_t sec_ammo = htons(p_inv.secondary_ammo);
     update.write((const char*)&sec_ammo, sizeof(sec_ammo));
@@ -106,7 +106,7 @@ std::pair<bool, Transaction> BinaryProtocol::await_transaction() {
 
     if (type == WEAPON_PURCHASE_MSG)
         return await_weapon_purchase();
-    else // (type == AMMO_PURCHASE_MSG)
+    else  // (type == AMMO_PURCHASE_MSG)
         return await_ammo_purchase();
 }
 
@@ -126,7 +126,7 @@ std::pair<bool, Transaction> BinaryProtocol::await_ammo_purchase() {
         return {true, Transaction()};
 
     WeaponType wpn_type = (WeaponType)*buf;
-    uint16_t amount = ntohs(*(uint16_t*)(buf+1));
+    uint16_t amount = ntohs(*(uint16_t*)(buf + 1));
 
     return {false, AmmoPurchase(wpn_type, amount)};
 }

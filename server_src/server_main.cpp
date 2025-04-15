@@ -1,14 +1,15 @@
 #include <cstring>
 #include <exception>
 #include <iostream>
-
-#include "../common_src/setup_protocol.h"
-#include "../common_src/constants.h"
-#include "../common_src/stdio_manager.h"
-#include "weapon_shop.h"
 #include <memory>
 
-int main(int argc, char* argv[]) {
+#include "../common_src/constants.h"
+#include "../common_src/setup_protocol.h"
+#include "../common_src/stdio_manager.h"
+
+#include "weapon_shop.h"
+
+int main(int argc, const char* argv[]) {
     try {
 
         if (argc != 3) {
@@ -38,7 +39,8 @@ int main(int argc, char* argv[]) {
             if (not transaction_confirmed)
                 stdio_mngr.print_transaction_rejected(transaction);
 
-            // std::cout << transaction.type << ", " << transaction.wpn_name << ", " << transaction.wpn_type << ", " << transaction.ammo_qty << "\n";
+            // std::cout << transaction.type << ", " << transaction.wpn_name << ", " <<
+            // transaction.wpn_type << ", " << transaction.ammo_qty << "\n";
         }
         // wait for player (receive username)
         // send protocol
@@ -57,10 +59,7 @@ int main(int argc, char* argv[]) {
         return EXIT_SUCCESS;
 
     } catch (const std::exception& err) {
-        std::cerr
-            << "Exception: "
-            << err.what()
-            << "\n";
+        std::cerr << "Exception: " << err.what() << "\n";
 
         return EXIT_FAILURE;
     }

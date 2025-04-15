@@ -2,11 +2,11 @@
 #include <iostream>
 #include <memory>
 
-#include "../common_src/setup_protocol.h"
 #include "../common_src/constants.h"
+#include "../common_src/setup_protocol.h"
 #include "../common_src/stdio_manager.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, const char* argv[]) {
     try {
 
         if (argc != 4) {
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
             protocol->request_transaction(transaction);
         }
         // money: $500 | knife: equipped | primary: not_equipped | secondary: glock, 30
-        
+
         // enter lobby (send username)
         // receive protocol
         // setear variable protocol_type
@@ -48,12 +48,9 @@ int main(int argc, char* argv[]) {
 
 
         return EXIT_SUCCESS;
-        
+
     } catch (const std::exception& err) {
-        std::cerr
-            << "Exception: "
-            << err.what()
-            << "\n";
+        std::cerr << "Exception: " << err.what() << "\n";
 
         return EXIT_FAILURE;
     }

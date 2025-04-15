@@ -1,12 +1,16 @@
 #include "setup_protocol.h"
+
 #include <sstream>
+#include <utility>
+
 #include <arpa/inet.h>
+
 #include "constants.h"
 // #include "liberror.h"
 
 
 // client
-SetupProtocol::SetupProtocol(const std::string& hostname, const std::string& servname) :
+SetupProtocol::SetupProtocol(const std::string& hostname, const std::string& servname):
         skt(hostname.c_str(), servname.c_str()) {}
 
 
@@ -32,11 +36,11 @@ std::unique_ptr<Protocol> SetupProtocol::request_login(const std::string& userna
 }
 
 // server
-SetupProtocol::SetupProtocol(const std::string& servname) :
-        skt(servname.c_str()) {}
+SetupProtocol::SetupProtocol(const std::string& servname): skt(servname.c_str()) {}
 
 
-std::pair<std::unique_ptr<Protocol>, std::string> SetupProtocol::wait_for_player(const uint8_t p_type) {
+std::pair<std::unique_ptr<Protocol>, std::string> SetupProtocol::wait_for_player(
+        const uint8_t p_type) {
     Socket peer_skt = skt.accept();
 
     uint8_t buf[LOGIN_MSG_SIZE];
@@ -59,7 +63,7 @@ std::pair<std::unique_ptr<Protocol>, std::string> SetupProtocol::wait_for_player
         protocol = std::make_unique<BinaryProtocol>(std::move(peer_skt));
     else
         protocol = std::make_unique<TextProtocol>(std::move(peer_skt));
-    
+
 
     return {std::move(protocol), std::move(username)};
     // throw LibError(errno, "invalid protocol type: %s", p_type);

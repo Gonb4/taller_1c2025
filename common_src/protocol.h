@@ -2,16 +2,17 @@
 #define PROTOCOL_H
 
 #include <string>
+#include <utility>
 
-#include "socket.h"
 #include "constants.h"
+#include "socket.h"
 // #include <sstream>
 
 class Protocol {
 protected:
     Socket skt;
 
-    Protocol(Socket&& s) : skt(std::move(s)) {}
+    explicit Protocol(Socket&& s): skt(std::move(s)) {}
 
 public:
     virtual bool disconnected() = 0;
@@ -19,7 +20,7 @@ public:
     // client
     virtual PlayerInventory await_inventory_update() = 0;
     virtual void request_transaction(const Transaction& t) = 0;
-    
+
     // server
     virtual void send_inventory(const PlayerInventory& p_inv) = 0;
     virtual std::pair<bool, Transaction> await_transaction() = 0;

@@ -1,11 +1,12 @@
 #ifndef SETUP_PROTOCOL_H
 #define SETUP_PROTOCOL_H
 
-#include <string>
 #include <memory>
+#include <string>
+#include <utility>
 
-#include "socket.h"
 #include "bin_protocol.h"
+#include "socket.h"
 #include "txt_protocol.h"
 
 class SetupProtocol {
@@ -20,7 +21,7 @@ public:
 
 
     // server
-    SetupProtocol(const std::string& servname);
+    explicit SetupProtocol(const std::string& servname);
 
     std::pair<std::unique_ptr<Protocol>, std::string> wait_for_player(const uint8_t p_type);
     // std::string receive_username();

@@ -1,25 +1,27 @@
 #ifndef BIN_PROTOCOL_H
 #define BIN_PROTOCOL_H
 
-#include "socket.h"
-#include "weapon_encoder.h"
+#include <utility>
+
 #include "constants.h"
 #include "protocol.h"
+#include "socket.h"
+#include "weapon_encoder.h"
 
-class BinaryProtocol : public Protocol {
+class BinaryProtocol: public Protocol {
 private:
     WeaponEncoder wpn_encoder;
 
-    //client
+    // client
     void request_weapon_purchase(const Transaction& t);
     void request_ammo_purchase(const Transaction& t);
 
-    //server
+    // server
     std::pair<bool, Transaction> await_weapon_purchase();
     std::pair<bool, Transaction> await_ammo_purchase();
 
 public:
-    BinaryProtocol(Socket&& s);
+    explicit BinaryProtocol(Socket&& s);
     bool disconnected() override;
 
     // client

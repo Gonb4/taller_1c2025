@@ -1,14 +1,15 @@
 #include "txt_protocol.h"
-#include "liberror.h"
+
 #include <sstream>
+#include <string>
+#include <utility>
 
-TextProtocol::TextProtocol(Socket&& s):
-        Protocol(std::move(s)) {}
+#include "liberror.h"
+
+TextProtocol::TextProtocol(Socket&& s): Protocol(std::move(s)) {}
 
 
-bool TextProtocol::disconnected() {
-    return skt.is_stream_recv_closed();
-}
+bool TextProtocol::disconnected() { return skt.is_stream_recv_closed(); }
 
 std::istringstream TextProtocol::receive_message(int n) {
     char buf[MAX_TXT_PROTOCOL_MSG_LEN] = {0};
@@ -23,7 +24,7 @@ std::istringstream TextProtocol::receive_message(int n) {
             if (*i == '\n')
                 n_lines += 1;
         }
-        idx += r;  
+        idx += r;
     }
 
     return std::istringstream(buf);
@@ -38,8 +39,9 @@ PlayerInventory TextProtocol::await_inventory_update() {
     uint16_t money = std::stoi(line.substr(line.find(':') + 1));
 
     std::getline(iss, line);
-    std::string knife = (line.substr(line.find(':') + 1) == TRUE_STR) ? EQUIPPED_STR : NOT_EQUIPPED_STR;
-    
+    std::string knife =
+            (line.substr(line.find(':') + 1) == TRUE_STR) ? EQUIPPED_STR : NOT_EQUIPPED_STR;
+
     std::getline(iss, line);
     int pri_len = line.find(',') - line.find(':') - 1;
     std::string primary = line.substr(line.find(':') + 1, pri_len);
@@ -58,7 +60,7 @@ void TextProtocol::request_transaction(const Transaction& t) {
         request_weapon_purchase(t);
     else if (t.type == AMM_PURCHASE)
         request_ammo_purchase(t);
-    else // t.type == TransactionType::INVALID
+    else  // t.type == TransactionType::INVALID
         throw LibError(errno, "Invalid Transaction used for parameter 't' in request_transaction");
 }
 
@@ -75,7 +77,7 @@ void TextProtocol::request_ammo_purchase(const Transaction& t) {
     std::ostringstream request;
     std::string wpn_type = (t.wpn_type == PRIMARY) ? PRIMARY_STR : SECONDARY_STR;
     request << AMMO_PURCHASE_STR << wpn_type << ":" << t.ammo_qty << "\n";
-    
+
     auto buf = request.str();
     if (not skt.sendall(buf.data(), buf.size()))
         throw LibError(errno, "Server disconnected unexpectedly");
@@ -86,11 +88,10 @@ void TextProtocol::send_inventory(const PlayerInventory& p_inv) {
     std::ostringstream update;
     std::string knife_eq = (p_inv.knife == EQUIPPED_STR) ? TRUE_STR : FALSE_STR;
 
-    update
-        << INV_MONEY_STR << ":" << p_inv.money << "\n"
-        << INV_KNIFE_STR << ":" << knife_eq << "\n"
-        << INV_PRIMARY_STR << ":" << p_inv.primary << "," << p_inv.primary_ammo << "\n"
-        << INV_SECONDARY_STR << ":" << p_inv.secondary << "," << p_inv.secondary_ammo << "\n";
+    update << INV_MONEY_STR << ":" << p_inv.money << "\n"
+           << INV_KNIFE_STR << ":" << knife_eq << "\n"
+           << INV_PRIMARY_STR << ":" << p_inv.primary << "," << p_inv.primary_ammo << "\n"
+           << INV_SECONDARY_STR << ":" << p_inv.secondary << "," << p_inv.secondary_ammo << "\n";
 
     auto buf = update.str();
     if (not skt.sendall(buf.data(), buf.size()))
@@ -126,6 +127,6 @@ std::pair<bool, Transaction> TextProtocol::await_ammo_purchase(const std::string
 
     if (w_t == PRIMARY_STR)
         return {false, AmmoPurchase(PRIMARY, amount)};
-    else // (w_t == SECONDARY_STR)
+    else  // (w_t == SECONDARY_STR)
         return {false, AmmoPurchase(SECONDARY, amount)};
 }

@@ -2,32 +2,32 @@
 #define WEAPON_SHOP_H
 
 #include <cstdint>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 #include "../common_src/constants.h"
 
 class WeaponShop {
-    private:
-        const std::unordered_map<std::string, Weapon>& weapon_map;
-        PlayerInventory player_inv;
-    
-        bool process_weapon_purchase(const Transaction& t);
-        bool process_ammo_purchase(const Transaction& t);
+private:
+    const std::unordered_map<std::string, Weapon>& weapon_map;
+    PlayerInventory player_inv;
 
-    public:
-        WeaponShop();
-    
-        const PlayerInventory& get_player_inventory() const;
-        bool process_transaction(const Transaction& t);
-    
-        WeaponShop(const WeaponShop&) = delete;
-        WeaponShop& operator=(const WeaponShop&) = delete;
-    
-        WeaponShop(WeaponShop&&) = default;
-        WeaponShop& operator=(WeaponShop&&) = default;
+    bool process_weapon_purchase(const Transaction& t);
+    bool process_ammo_purchase(const Transaction& t);
 
-        ~WeaponShop() = default;
-    };
+public:
+    WeaponShop();
+
+    const PlayerInventory& get_player_inventory() const;
+    bool process_transaction(const Transaction& t);
+
+    WeaponShop(const WeaponShop&) = delete;
+    WeaponShop& operator=(const WeaponShop&) = delete;
+
+    WeaponShop(WeaponShop&&) = default;
+    WeaponShop& operator=(WeaponShop&&) = default;
+
+    ~WeaponShop() = default;
+};
 
 #endif
