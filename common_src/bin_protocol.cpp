@@ -36,7 +36,7 @@ PlayerInventory BinaryProtocol::await_inventory_update() {
     i += sizeof(sec_code);
     std::string secondary = wpn_encoder.cton(sec_code);
     uint16_t sec_ammo = ntohs(*(uint16_t*)i);
-    i += sizeof(sec_ammo);
+    // i += sizeof(sec_ammo);
 
     return PlayerInventory(money, knife, primary, pri_ammo, secondary, sec_ammo);
 }

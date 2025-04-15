@@ -90,7 +90,7 @@ struct PlayerInventory {
             secondary("glock"),
             secondary_ammo(STARTING_AMMO) {}
 
-    PlayerInventory(uint16_t m, std::string k, std::string p, uint16_t p_ammo, std::string s,
+    PlayerInventory(uint16_t m, const std::string& k, std::string p, uint16_t p_ammo, std::string s,
                     uint16_t s_ammo):
             money(m),
             knife(k),
