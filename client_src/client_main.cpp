@@ -31,22 +31,7 @@ int main(int argc, const char* argv[]) {
                 break;
             protocol->request_transaction(transaction);
         }
-        // money: $500 | knife: equipped | primary: not_equipped | secondary: glock, 30
-
-        // enter lobby (send username)
-        // receive protocol
-        // setear variable protocol_type
-        // receive inventory update
-        // print inventory
-
-        // loop while(getline stdin (parse) no sea exit):
-        // if exit return
-        //  -weapon purchase
-        //  -ammo purchase
-        // receive inventory update
-        // print inventory
-
-
+        
         return EXIT_SUCCESS;
 
     } catch (const std::exception& err) {

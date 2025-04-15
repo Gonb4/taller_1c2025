@@ -24,7 +24,6 @@ public:
     explicit SetupProtocol(const std::string& servname);
 
     std::pair<std::unique_ptr<Protocol>, std::string> wait_for_player(const uint8_t p_type);
-    // std::string receive_username();
 
 
     SetupProtocol(const SetupProtocol&) = delete;

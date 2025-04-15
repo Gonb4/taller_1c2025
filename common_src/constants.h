@@ -5,8 +5,6 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
-// #include <memory>
-
 
 #define LOGIN_MSG 0x01
 #define LOGIN_MSG_SIZE 3  // sin incluir username
@@ -98,8 +96,6 @@ struct PlayerInventory {
             primary_ammo(p_ammo),
             secondary(std::move(s)),
             secondary_ammo(s_ammo) {}
-
-    // std::string as_string() const {}
 };
 
 enum TransactionType { INVALID, WPN_PURCHASE, AMM_PURCHASE };

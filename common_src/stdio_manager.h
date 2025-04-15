@@ -16,8 +16,6 @@ private:
                                                     const PlayerInventory& p_inv);
 
     // server
-    // void print_weapon_purchase_rejected(const Transaction& t);
-    // void print_ammo_purchase_rejected(const Transaction& t);
 
 public:
     StdIOManager();

@@ -95,7 +95,3 @@ void StdIOManager::print_transaction_rejected(const Transaction& t) {
     else  // t.type == TransactionType::INVALID
         throw LibError(errno, "Invalid Transaction used for parameter 't' in request_transaction");
 }
-
-// void StdIOManager::print_weapon_purchase_rejected(const Transaction& t) {}
-
-// void StdIOManager::print_ammo_purchase_rejected(const Transaction& t) {}

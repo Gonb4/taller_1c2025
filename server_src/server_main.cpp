@@ -38,23 +38,7 @@ int main(int argc, const char* argv[]) {
             bool transaction_confirmed = wpn_shop.process_transaction(transaction);
             if (not transaction_confirmed)
                 stdio_mngr.print_transaction_rejected(transaction);
-
-            // std::cout << transaction.type << ", " << transaction.wpn_name << ", " <<
-            // transaction.wpn_type << ", " << transaction.ammo_qty << "\n";
         }
-        // wait for player (receive username)
-        // send protocol
-        // setear variable protocolo
-        // print username
-        // crear inventario (clase PlayerInventory)
-        // send inventory update
-
-        // loop while(receive_transaction no devuelva algo que indice player desconectado):
-        // receive transaccion (clase Transaction)
-        // pasar Transaction a: PlayerInventory? clase Shop con atributo PlayerInventory? (devolver
-        // algo que diga si fue valida o no) if not valida print no es valida
-        // send inventory update
-
 
         return EXIT_SUCCESS;
 

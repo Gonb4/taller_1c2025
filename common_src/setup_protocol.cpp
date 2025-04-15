@@ -6,8 +6,6 @@
 #include <arpa/inet.h>
 
 #include "constants.h"
-// #include "liberror.h"
-
 
 // client
 SetupProtocol::SetupProtocol(const std::string& hostname, const std::string& servname):
@@ -66,9 +64,4 @@ std::pair<std::unique_ptr<Protocol>, std::string> SetupProtocol::wait_for_player
 
 
     return {std::move(protocol), std::move(username)};
-    // throw LibError(errno, "invalid protocol type: %s", p_type);
 }
-
-// std::string SetupProtocol::receive_username() {
-//     return username;
-// }
