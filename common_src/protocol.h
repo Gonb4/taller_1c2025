@@ -21,7 +21,7 @@ public:
     virtual void request_transaction(const Transaction& t) = 0;
     
     // server
-    virtual void send_inventory(const PlayerInventory&) = 0;
+    virtual void send_inventory(const PlayerInventory& p_inv) = 0;
     virtual std::pair<bool, Transaction> await_transaction() = 0;
 
 

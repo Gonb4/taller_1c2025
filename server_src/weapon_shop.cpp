@@ -19,8 +19,10 @@ bool WeaponShop::process_transaction(const Transaction& t) {
 }
 
 bool WeaponShop::process_weapon_purchase(const Transaction& t) {
-    if (t.wpn_name == NOT_EQUIPPED_STR)
-        return true; // transaccion confirmada pero sin efecto (arma inexistente)
+    if (t.wpn_name == NO_WEAPON_STR)
+        return true; // transaccion confirmada pero sin efecto (arma inexistente) (protocolo binario)
+    if (not weapon_map.count(t.wpn_name))
+        return true; // transaccion confirmada pero sin efecto (arma inexistente) (protocolo texto)
 
     Weapon weapon = weapon_map.at(t.wpn_name);
     int cost = weapon.price;

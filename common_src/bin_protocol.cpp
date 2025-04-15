@@ -54,7 +54,7 @@ void BinaryProtocol::request_transaction(const Transaction& t) {
 void BinaryProtocol::request_weapon_purchase(const Transaction& t) {
     std::ostringstream request;
     request.put(WEAPON_PURCHASE_MSG);
-    request.put(wpn_encoder.ntoc(t.wpn_name)); // si t.wpn_name es invalido el code es 0x00 (arma NOT_EQUIPPED_STR)
+    request.put(wpn_encoder.ntoc(t.wpn_name)); // si t.wpn_name es invalido el code es 0x00 (arma NO_WEAPON_STR)
 
     auto buf = request.str();
     if (not skt.sendall(buf.data(), buf.size()))

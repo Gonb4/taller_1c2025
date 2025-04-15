@@ -1,13 +1,10 @@
 #ifndef BIN_PROTOCOL_H
 #define BIN_PROTOCOL_H
 
-// #include <string>
-
 #include "socket.h"
 #include "weapon_encoder.h"
 #include "constants.h"
 #include "protocol.h"
-// #include <sstream>
 
 class BinaryProtocol : public Protocol {
 private:
@@ -30,7 +27,7 @@ public:
     void request_transaction(const Transaction& t) override;
 
     // server
-    void send_inventory(const PlayerInventory&) override;
+    void send_inventory(const PlayerInventory& p_inv) override;
     std::pair<bool, Transaction> await_transaction() override;
 
 
