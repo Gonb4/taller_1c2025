@@ -39,13 +39,13 @@ class Tateti {
     public:
         Tateti();
 
-        const TatetiBoard& get_board(); // const char p_sym
         bool is_over(const char p_sym);
         bool make_move(const char p_sym, const PlayerMove& p_move);
         void finish_turn(const char p_sym);
 
-        // sin monitoreo
-        char get_winner() const;
+        // sin condition variable (turno)
+        const TatetiBoard& get_board(); // const char p_sym
+        char get_winner();
 
         Tateti(const Tateti&) = delete;
         Tateti& operator=(const Tateti&) = delete;

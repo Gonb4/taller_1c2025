@@ -21,13 +21,6 @@ void Tateti::cv_other_turn_is_over(std::unique_lock<std::mutex>& lck, const char
 }
 
 
-const TatetiBoard& Tateti::get_board() { // const char p_sym
-    // std::unique_lock<std::mutex> lck(mtx);
-    // cv_other_turn_is_over(lck, p_sym);
-
-    return board;
-}
-
 bool Tateti::is_over(const char p_sym) {
     std::unique_lock<std::mutex> lck(mtx);
     cv_other_turn_is_over(lck, p_sym);
@@ -98,7 +91,16 @@ void Tateti::finish_turn(const char p_sym) {
     other_turn_is_over.notify_all();
 }
 
-// sin monitoreo
-char Tateti::get_winner() const {
+// sin condition variable (turno)
+const TatetiBoard& Tateti::get_board() { // const char p_sym
+    std::unique_lock<std::mutex> lck(mtx);
+    // cv_other_turn_is_over(lck, p_sym);
+
+    return board;
+}
+
+char Tateti::get_winner() {
+    std::unique_lock<std::mutex> lck(mtx);
+
     return winner_sym;
 }
