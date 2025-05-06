@@ -6,6 +6,7 @@
 
 namespace {
     constexpr int TxtMsgLenBytes = 2;
+    constexpr int MaxTxtMsgLen = 256;
 
     constexpr uint8_t CreateGameMsg = 0x6E;
     constexpr uint8_t JoinGameMsg = 0x6A;
@@ -48,9 +49,8 @@ std::string Protocol::receive_text_message() {
 
     uint16_t size = ntohs(*(uint16_t*)size_buf);
 
-    char text_buf[size + 1];
-    text_buf[size] = '\0';
-    if (not skt.recvall(text_buf, size))
+    char text_buf[MaxTxtMsgLen] = {0};
+    if (not skt.recvall(text_buf, (size < MaxTxtMsgLen) ? size : MaxTxtMsgLen-1))
         throw std::runtime_error("Socket receive error: disconnected");
 
     return std::string(text_buf);

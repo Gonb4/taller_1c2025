@@ -23,7 +23,7 @@ class Tateti {
         TatetiBoard board;
         std::unordered_map<WinVar, std::vector<int>> win_vars;
         std::unordered_map<char, std::unordered_map<SymData, int>> sym_info;
-        bool auth_sym;
+        char auth_sym;
         bool _is_over;
         char winner_sym;
         int turns;

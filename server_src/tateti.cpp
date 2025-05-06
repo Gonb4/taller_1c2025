@@ -39,7 +39,7 @@ bool Tateti::make_move(const char p_sym, const PlayerMove& p_move) {
     std::unique_lock<std::mutex> lck(mtx);
     cv_other_turn_is_over(lck, p_sym);
 
-    if (not is_move_valid)
+    if (not is_move_valid(p_move))
         return false;
     board[p_move.row][p_move.col] = p_sym;
     check_winner(p_move);

@@ -72,7 +72,7 @@ class ClientThread : public Thread {
                     while (true) {
                         protocol.send_game_update(game.get_board());
                         const PlayerMove p_move = protocol.await_game_move();
-                        if (game.make_move(symbol, p_move));
+                        if (game.make_move(symbol, p_move))
                             break;
                     }
                     game.finish_turn(symbol);
