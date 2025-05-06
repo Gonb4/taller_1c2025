@@ -1,8 +1,6 @@
-#include <sstream>
-
 #include "tateti.h"
 
-Tateti::Tateti() : auth_sym(P1_SYM), _is_over(false), winner_sym(NULL_SYM) {
+Tateti::Tateti() : auth_sym(P1_SYM), _is_over(false), winner_sym(NULL_SYM), turns(0) {
     for (auto& row : board) {
         row.fill(NULL_SYM);
     }
@@ -23,22 +21,11 @@ void Tateti::cv_other_turn_is_over(std::unique_lock<std::mutex>& lck, const char
 }
 
 
-std::string Tateti::get_status(const char p_sym) {
-    std::unique_lock<std::mutex> lck(mtx);
-    cv_other_turn_is_over(lck, p_sym);
+const TatetiBoard& Tateti::get_board() { // const char p_sym
+    // std::unique_lock<std::mutex> lck(mtx);
+    // cv_other_turn_is_over(lck, p_sym);
 
-    std::ostringstream oss;
-
-    oss << "    1 . 2 . 3 .\n"
-        << "  +---+---+---+\n"
-        << "1 | " << board[0][0] << " | " << board[0][1] << " | " << board[0][2] << " |\n"
-        << "  +---+---+---+\n"
-        << "2 | " << board[1][0] << " | " << board[1][1] << " | " << board[1][2] << " |\n"
-        << "  +---+---+---+\n"
-        << "3 | " << board[2][0] << " | " << board[2][1] << " | " << board[2][2] << " |\n"
-        << "  +---+---+---+\n";
-
-    return oss.str();
+    return board;
 }
 
 bool Tateti::is_over(const char p_sym) {
@@ -56,6 +43,8 @@ bool Tateti::make_move(const char p_sym, const PlayerMove& p_move) {
         return false;
     board[p_move.row][p_move.col] = p_sym;
     check_winner(p_move);
+    if (++turns == MAX_TURNS)
+        _is_over = true;
 
     return true;
 }

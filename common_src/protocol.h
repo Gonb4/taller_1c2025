@@ -2,6 +2,7 @@
 #define PROTOCOL_H
 
 #include <string>
+#include <vector>
 
 #include "constants.h"
 #include "socket.h"
@@ -10,31 +11,41 @@ class Protocol {
     private:
         Socket skt;
 
-        // client
-        // void request_create_game(const Operation& op); // o const std::string&
-        // void request_list_games();
-        // void request_join_game(const Operation& op); // o const std::string&
+        std::string create_text_message(const std::string& msg);
+        void send_message(const std::string& buf);
+        std::string receive_text_message();
+        
+        // ======================= SERVER =======================
 
-        // server
-        // Operation await_create_game();
-        // Operation await_list_games();
-        // Operation await_join_game();
+        std::string board_to_string(const TatetiBoard& g_b);
 
     public:
-        // client
-        Protocol(const std::string& hostname, const std::string& servname);
+        // ======================= CLIENT =======================
 
-        // void request_operation(const Operation& op); // return value para list_games?
-        std::string await_game_update();
+        Protocol(const std::string& host, const std::string& port);
+
+        // void request_operation(const Operation& op); // return value para list_games? // ESTA NO HACE FALTA
+        void request_create_game(const std::string&);
+        void request_join_game(const std::string& name);
+        bool await_operation_status();
+        void request_list_games();
+        std::string await_game_list();
+        std::pair<bool, std::string> await_game_update();
         void request_game_move(const PlayerMove& p_move);
 
+        // ======================= SERVER =======================
 
-        // server
         explicit Protocol(Socket&& s);
 
-        // Operation await_operation();
-        void send_game_update(const std::string& g_status);
-        PlayerMove await_player_move();
+        Operation await_operation();
+        void send_operation_confirmed();
+        void send_operation_rejected();
+        void send_game_list(const std::vector<std::string>& g_list);
+        void send_game_update(const TatetiBoard& g_b);
+        PlayerMove await_game_move();
+        void send_game_result(const TatetiBoard& g_b, const GameResult res);
+        void destroy_socket();
+
 
         Protocol(const Protocol&) = delete;
         Protocol& operator=(const Protocol&) = delete;
