@@ -46,7 +46,8 @@ private:
 
 
 public:
-    ClientThread(Socket&& s, GameMap& gm): protocol(std::move(s)), game_map(gm), in_game(false) {}
+    ClientThread(Socket&& s, GameMap& gm):
+            protocol(std::move(s)), game_map(gm), in_game(false), symbol(NULL_SYM) {}
 
     void run() override {
         try {

@@ -43,9 +43,9 @@ bool Tateti::make_move(const char p_sym, const PlayerMove& p_move) {
 }
 
 bool Tateti::is_move_valid(const PlayerMove& p_move) {
-    if (p_move.row < 0 || p_move.row > N_ROWS - 1)
+    if (p_move.row > N_ROWS - 1)
         return false;
-    if (p_move.col < 0 || p_move.col > N_COLS - 1)
+    if (p_move.col > N_COLS - 1)
         return false;
     if (board[p_move.row][p_move.col] != NULL_SYM)
         return false;
