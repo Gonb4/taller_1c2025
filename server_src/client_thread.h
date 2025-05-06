@@ -29,9 +29,9 @@ class ClientThread : public Thread {
                 game_name = g_name;
                 symbol = P1_SYM;
                 in_game = true;
-                protocol.send_operation_confirmed();
+                // protocol.send_operation_confirmed();
             } else {
-                protocol.send_operation_rejected();
+                // protocol.send_operation_rejected();
             }
         }
 
@@ -40,9 +40,9 @@ class ClientThread : public Thread {
                 game_name = g_name;
                 symbol = P2_SYM;
                 in_game = true;
-                protocol.send_operation_confirmed();
+                // protocol.send_operation_confirmed();
             } else {
-                protocol.send_operation_rejected();
+                // protocol.send_operation_rejected();
             }
         }
 

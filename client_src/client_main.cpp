@@ -27,10 +27,10 @@ int main(int argc, const char* argv[]) {
             const Operation op = stdio_mngr.read_operation();
             if (op.type == CREATE_GAME_OP) {
                 protocol.request_create_game(op.game_name);
-                in_game = protocol.await_operation_status();
+                in_game = true; // protocol.await_operation_status();
             } else if (op.type == JOIN_GAME_OP) {
                 protocol.request_join_game(op.game_name);
-                in_game = protocol.await_operation_status();
+                in_game = true; // protocol.await_operation_status();
             } else if (op.type == LIST_GAMES_OP) {
                 protocol.request_list_games();
                 stdio_mngr.print(protocol.await_game_list());
