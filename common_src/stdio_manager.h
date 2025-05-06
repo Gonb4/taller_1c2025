@@ -12,7 +12,7 @@ class StdIOManager {
         // ======================= CLIENT =======================
 
         Operation read_operation();
-        PlayerMove read_game_move(); // conversion indices
+        PlayerMove read_game_move();
         void print(const std::string& msg);
 
         // ======================= SERVER =======================

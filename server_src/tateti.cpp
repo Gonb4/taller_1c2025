@@ -92,9 +92,8 @@ void Tateti::finish_turn(const char p_sym) {
 }
 
 // sin condition variable (turno)
-const TatetiBoard& Tateti::get_board() { // const char p_sym
+const TatetiBoard& Tateti::get_board() {
     std::unique_lock<std::mutex> lck(mtx);
-    // cv_other_turn_is_over(lck, p_sym);
 
     return board;
 }

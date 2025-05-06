@@ -53,8 +53,6 @@ void GameMap::leave_game(const std::string& name) {
     }
 }
 
-// void GameMap::wipe_empty_games() {} // NO HACE FALTA -> al final si (borrar los que player_count == 0) -> al final no? (era por usar la Tateti& en force_stop, pero al final no la usa)
-
 Tateti& GameMap::get_game(const std::string& name) {
     std::unique_lock<std::mutex> lck(mtx);
 
@@ -62,4 +60,4 @@ Tateti& GameMap::get_game(const std::string& name) {
         throw std::runtime_error("Game not found");
 
     return games[name];
-} // este creo que no necesita mutex o quizas si por si acaso
+}

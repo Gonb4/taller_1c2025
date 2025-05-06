@@ -56,29 +56,3 @@ int main(int argc, const char* argv[]) {
 
     return EXIT_FAILURE;
 }
-
-
-
-// std::string game_status; // simetrico al game_board de ClientThread
-// bool in_game?
-
-
-// while true: (o not in_game)
-//     stdio mngr lee const Operation
-//     if create
-//         protocolo.request_create_game()
-//         std::tie - protocolo.await_game_update() // no puedo hacer este wait porque el server no manda nada si create invalid (nombre ya existente)
-//     if join
-//         protocolo.request_join_game()
-//         std::tie - protocolo.await_game_update() // no puedo hacer este wait porque el server no manda nada si join invalid (partida llena o inexistente)
-//     if list
-//         protocolo.request_list_games()
-//         protocolo.await_game_list()
-
-
-// while true: (o in_game)
-//     std::tie - protocolo.await_game_update() // esto deberia ir 1ro si no puedo hacer el await_game_update arriba
-//     if not in game:
-//         break
-//     stdio mngr lee const PlayerMove
-//     protocolo.request_game_move()

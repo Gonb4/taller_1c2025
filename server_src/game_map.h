@@ -16,14 +16,13 @@ class GameMap {
 
     public:
         GameMap();
-        // vvv creo que todos con mutex vvv
+
         bool create_game(const std::string& name);
         bool join_game(const std::string& name);
         std::vector<std::string> list_games();
 
-        void leave_game(const std::string& name); 
-        // void wipe_empty_games(); // NO HACE FALTA -> al final si (borrar los que player_count == 0)
-        Tateti& get_game(const std::string& name); // este creo que no necesita mutex o quizas si por si acaso
+        void leave_game(const std::string& name);
+        Tateti& get_game(const std::string& name);
 
 
         GameMap(const GameMap&) = delete;

@@ -44,6 +44,7 @@ class AcceptorThread : public Thread {
             clients.clear();
         }
 
+        
     public:
         AcceptorThread(const std::string& port, GameMap& gm) : skt(port.c_str()), gm_ref(gm) {}
 
@@ -62,30 +63,6 @@ class AcceptorThread : public Thread {
                 kill_all_clients();
             }
         }
-
-            // crear objs Protocol y ClientThreads (startearlos)
-            // reap de threads y partidas muertas?
-
-            // while true:
-            //     accept
-            //     if caso skt cerrado ('q') LibError
-            //         break
-            //     ClientThread(Protocol(move(peer_skt))) // con new, y pushear en vector threads
-            //     client_th->start()
-            //     recorro vector threads: // esto lo puedo llamar reap_dead
-            //         if not _is_alive
-            //             join
-            //             delete thread // hace falta join? yo diria que si
-            //     game_map.wipe_empty_games()
-
-            // // servidor cerro skt
-            // recorro vector threads: // esto lo puedo llamar kill_threads o kill_clients // 2 TANDAS, SOCKETS 1RA JOINS 2DA
-            //     if _is_alive:
-            //         thread.kill_self cerrarle socket // lo puedo agregar en stop? guardo cada peer_skt - ClientThread? otro for antes de este que cierra todos los skt indiscriminadamente?
-            //     thread.join                 
-            //     delete thread
-            // game_map.wipe_empty_games() // deberian estar todos vacios
-        
 
         void force_stop() {
             skt.shutdown(2);

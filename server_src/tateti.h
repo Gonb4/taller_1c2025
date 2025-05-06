@@ -44,7 +44,7 @@ class Tateti {
         void finish_turn(const char p_sym);
 
         // sin condition variable (turno)
-        const TatetiBoard& get_board(); // const char p_sym
+        const TatetiBoard& get_board();
         char get_winner();
 
         Tateti(const Tateti&) = delete;

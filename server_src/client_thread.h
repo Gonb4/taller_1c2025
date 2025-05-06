@@ -2,7 +2,6 @@
 #define CLIENT_THREAD_H
 
 #include <string>
-// #include <vector>
 
 #include "../common_src/thread.h"
 #include "../common_src/protocol.h"
@@ -16,12 +15,10 @@ class ClientThread : public Thread {
     private:
         Protocol protocol;
         GameMap& game_map;
-        // Tateti& game; // cambio por variable local
         bool in_game;
         std::string game_name;
         char symbol;
-        // std::string game_board; // const TatetiBoard& no se puede creo, voy a tener que hacer .get_board() directo en los parametros de las funciones
-        // bool joined_game // bool ovrr_perm (en force_kill(force_stop?) y metodos tateti)
+        // bool ovrr_perm; // en force_stop y metodos tateti
 
 
         void handle_create_game(const std::string& g_name) {
@@ -97,47 +94,9 @@ class ClientThread : public Thread {
             }
         }
 
-
-            // while not in game:
-            //     await (create, list o join) // sale de while con game_name y symbol seteados // try {recv msg} catch {return} // este catch es para runtime error que deberia tirar desde protocolo si socket cierra
-
-            // Tateti& game = game_map.get_game()
-        
-            // while true:
-            //     if game.is_over
-            //         finish_turn
-            //         break
-            //     game_board = game.get_board() // esto creo que no va mas
-            //     while true
-            //         send game update(game_board)
-            //         if servidor cierra skt // try {send, await} catch {finish, leave, return} en vez de 2 veces // mismo razon para catch que arriba
-            //             finish_turn
-            //             game_map.leave_game(hay que ver que paso aca, agrego attr game_name?)
-            //             return?
-            //         await player move
-            //         if servidor cierra skt
-            //             finish_turn
-            //             game_map.leave_game(hay que ver que paso aca, agrego attr game_name?)
-            //             return?
-            //         if game.make_move
-            //             break
-            //     finish_turn
-            
-            // game.get_winner
-            // if w == symbol
-            //     send winner msg(game_board) // try-catches
-            // else if w == NULL_SYM
-            //     send tie msg(game_board)
-            // else
-            //     send loser msg(game_board)
-            // game_map.leave_game(hay que ver que paso aca, agrego attr game_name?)
-
-
         void force_stop() {
             protocol.destroy_socket();
-            // if joined_game: // si es false es seguro que no jugo el 1er turno
-            //     Tateti& game = game_map.get_game()
-            //     game.finish_turn((symbol == P1_SYM) ? P2_SYM : P1_SYM) // finish turn del contrario // creo que con esto abarco todas las posibilidades
+            // ovrr_perm = true;
         }
 
         ~ClientThread() {}

@@ -24,7 +24,6 @@ class Protocol {
 
         Protocol(const std::string& host, const std::string& port);
 
-        // void request_operation(const Operation& op); // return value para list_games? // ESTA NO HACE FALTA
         void request_create_game(const std::string&);
         void request_join_game(const std::string& name);
         bool await_operation_status();
