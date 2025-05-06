@@ -33,6 +33,7 @@ int main(int argc, const char* argv[]) {
                 in_game = protocol.await_operation_status();
             } else if (op.type == LIST_GAMES_OP) {
                 protocol.request_list_games();
+                stdio_mngr.print(protocol.await_game_list());
             }
         }
 

@@ -68,7 +68,8 @@ void StdIOManager::print(const std::string& msg) {
 // ======================= SERVER =======================
 
 void StdIOManager::read_quit() {
-    while (int c = std::cin.get() != QuitChar) {
+    int c;
+    while ((c = std::cin.get()) != QuitChar) {
         if (c == EOF)
             break;
     }

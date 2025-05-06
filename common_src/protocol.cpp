@@ -16,7 +16,7 @@ namespace {
     const std::string OperationConfirmed = "OP OK";
     const std::string OperationRejected = "OP FAIL";
 
-    constexpr int GameUpdateLen = 135;
+    constexpr int GameUpdateLen = 128;
 
     const std::string WinnerMessage = "Felicitaciones! Ganaste!\n";
     const std::string TieMessage = "La partida ha terminado en empate\n";
