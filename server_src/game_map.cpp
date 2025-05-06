@@ -11,7 +11,7 @@ bool GameMap::create_game(const std::string& name) {
     if (games.count(name))
         return false;
 
-    games[name]; // Tateti solo tiene default constructor
+    games[name];  // Tateti solo tiene default constructor
     player_count[name] = 1;
 
     return true;
@@ -34,7 +34,7 @@ std::vector<std::string> GameMap::list_games() {
     std::unique_lock<std::mutex> lck(mtx);
 
     std::vector<std::string> list;
-    for (const auto& [k, v] : games) {
+    for (const auto& [k, v]: games) {
         list.push_back(k);
     }
 

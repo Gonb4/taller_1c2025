@@ -4,14 +4,14 @@
 #include <sstream>
 
 namespace {
-    const std::string CreateGameCmd = "crear";
-    const std::string JoinGameCmd = "unirse";
-    const std::string ListGamesCmd = "listar";
+const char* CreateGameCmd = "crear";
+const char* JoinGameCmd = "unirse";
+const char* ListGamesCmd = "listar";
 
-    const std::string GameMoveCmd = "jugar";
+const char* GameMoveCmd = "jugar";
 
-    constexpr char QuitChar = 'q';
-}
+constexpr char QuitChar = 'q';
+}  // namespace
 
 
 StdIOManager::StdIOManager() {}
@@ -61,9 +61,7 @@ PlayerMove StdIOManager::read_game_move() {
     }
 }
 
-void StdIOManager::print(const std::string& msg) {
-    std::cout << msg;
-}
+void StdIOManager::print(const std::string& msg) { std::cout << msg; }
 
 // ======================= SERVER =======================
 

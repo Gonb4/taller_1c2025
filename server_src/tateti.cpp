@@ -1,7 +1,7 @@
 #include "tateti.h"
 
-Tateti::Tateti() : auth_sym(P1_SYM), _is_over(false), winner_sym(NULL_SYM), turns(0) {
-    for (auto& row : board) {
+Tateti::Tateti(): auth_sym(P1_SYM), _is_over(false), winner_sym(NULL_SYM), turns(0) {
+    for (auto& row: board) {
         row.fill(NULL_SYM);
     }
 
@@ -63,18 +63,18 @@ void Tateti::check_winner(const PlayerMove& p_move) {
 
     n = win_vars[COLS][p_move.col] += sym_info[auth_sym][VAL];
     if (n == sym_info[auth_sym][WIN_VAL])
-        game_over = true;    
+        game_over = true;
 
     if (p_move.row == p_move.col) {
         n = win_vars[DIAGS][0] += sym_info[auth_sym][VAL];
         if (n == sym_info[auth_sym][WIN_VAL])
-            game_over = true; 
+            game_over = true;
     }
 
     if (p_move.row + p_move.col == 2) {
         n = win_vars[DIAGS][1] += sym_info[auth_sym][VAL];
         if (n == sym_info[auth_sym][WIN_VAL])
-            game_over = true; 
+            game_over = true;
     }
 
     if (game_over) {

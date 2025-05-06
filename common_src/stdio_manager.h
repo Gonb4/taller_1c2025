@@ -6,27 +6,27 @@
 #include "constants.h"
 
 class StdIOManager {
-    public:
-        StdIOManager();
+public:
+    StdIOManager();
 
-        // ======================= CLIENT =======================
+    // ======================= CLIENT =======================
 
-        Operation read_operation();
-        PlayerMove read_game_move();
-        void print(const std::string& msg);
+    Operation read_operation();
+    PlayerMove read_game_move();
+    void print(const std::string& msg);
 
-        // ======================= SERVER =======================
+    // ======================= SERVER =======================
 
-        void read_quit();
+    void read_quit();
 
 
-        StdIOManager(const StdIOManager&) = delete;
-        StdIOManager& operator=(const StdIOManager&) = delete;
+    StdIOManager(const StdIOManager&) = delete;
+    StdIOManager& operator=(const StdIOManager&) = delete;
 
-        StdIOManager(StdIOManager&&) = default;
-        StdIOManager& operator=(StdIOManager&&) = default;
+    StdIOManager(StdIOManager&&) = default;
+    StdIOManager& operator=(StdIOManager&&) = default;
 
-        ~StdIOManager() = default;
+    ~StdIOManager() = default;
 };
 
 #endif

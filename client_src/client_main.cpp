@@ -2,22 +2,21 @@
 #include <string>
 #include <tuple>
 
+#include "../common_src/constants.h"
 #include "../common_src/protocol.h"
 #include "../common_src/stdio_manager.h"
-#include "../common_src/constants.h"
 
 int main(int argc, const char* argv[]) {
     try {
 
         if (argc != 3) {
-            std::cerr << "Bad program call. Expected: "
-                      << argv[0] << " <host> <port>\n";
+            std::cerr << "Bad program call. Expected: " << argv[0] << " <host> <port>\n";
             return EXIT_FAILURE;
         }
 
         const std::string host = argv[1];
         const std::string port = argv[2];
-        
+
         Protocol protocol(host, port);
         StdIOManager stdio_mngr;
         std::string game_status;
@@ -27,10 +26,10 @@ int main(int argc, const char* argv[]) {
             const Operation op = stdio_mngr.read_operation();
             if (op.type == CREATE_GAME_OP) {
                 protocol.request_create_game(op.game_name);
-                in_game = true; // protocol.await_operation_status();
+                in_game = true;  // protocol.await_operation_status();
             } else if (op.type == JOIN_GAME_OP) {
                 protocol.request_join_game(op.game_name);
-                in_game = true; // protocol.await_operation_status();
+                in_game = true;  // protocol.await_operation_status();
             } else if (op.type == LIST_GAMES_OP) {
                 protocol.request_list_games();
                 stdio_mngr.print(protocol.await_game_list());

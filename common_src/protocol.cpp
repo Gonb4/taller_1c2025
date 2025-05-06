@@ -2,29 +2,31 @@
 
 #include <cstdint>
 #include <sstream>
+#include <utility>
+
 #include <arpa/inet.h>
 
 namespace {
-    constexpr int TxtMsgLenBytes = 2;
-    constexpr int MaxTxtMsgLen = 256;
+constexpr int TxtMsgLenBytes = 2;
+constexpr int MaxTxtMsgLen = 256;
 
-    constexpr uint8_t CreateGameMsg = 0x6E;
-    constexpr uint8_t JoinGameMsg = 0x6A;
-    constexpr uint8_t ListGamesMsg = 0x6C;
-    constexpr uint8_t GameMoveMsg = 0x70;
+constexpr uint8_t CreateGameMsg = 0x6E;
+constexpr uint8_t JoinGameMsg = 0x6A;
+constexpr uint8_t ListGamesMsg = 0x6C;
+constexpr uint8_t GameMoveMsg = 0x70;
 
-    const std::string OperationConfirmed = "OP OK";
-    const std::string OperationRejected = "OP FAIL";
+const char* OperationConfirmed = "OP OK";
+const char* OperationRejected = "OP FAIL";
 
-    constexpr int GameUpdateLen = 128;
+constexpr int GameUpdateLen = 128;
 
-    const std::string WinnerMessage = "Felicitaciones! Ganaste!\n";
-    const std::string TieMessage = "La partida ha terminado en empate\n";
-    const std::string LoserMessage = "Has perdido. Segui intentando!\n";
+const char* WinnerMessage = "Felicitaciones! Ganaste!\n";
+const char* TieMessage = "La partida ha terminado en empate\n";
+const char* LoserMessage = "Has perdido. Segui intentando!\n";
 
-    constexpr uint8_t ColMask = 0xF0;
-    constexpr uint8_t RowMask = 0x0F;
-}
+constexpr uint8_t ColMask = 0xF0;
+constexpr uint8_t RowMask = 0x0F;
+}  // namespace
 
 
 std::string Protocol::create_text_message(const std::string& msg) {
@@ -50,7 +52,7 @@ std::string Protocol::receive_text_message() {
     uint16_t size = ntohs(*(uint16_t*)size_buf);
 
     char text_buf[MaxTxtMsgLen] = {0};
-    if (not skt.recvall(text_buf, (size < MaxTxtMsgLen) ? size : MaxTxtMsgLen-1))
+    if (not skt.recvall(text_buf, (size < MaxTxtMsgLen) ? size : MaxTxtMsgLen - 1))
         throw std::runtime_error("Socket receive error: disconnected");
 
     return std::string(text_buf);
@@ -59,7 +61,8 @@ std::string Protocol::receive_text_message() {
 
 // ======================= CLIENT =======================
 
-Protocol::Protocol(const std::string& host, const std::string& port) : skt(host.c_str(), port.c_str()) {}
+Protocol::Protocol(const std::string& host, const std::string& port):
+        skt(host.c_str(), port.c_str()) {}
 
 
 void Protocol::request_create_game(const std::string& name) {
@@ -68,7 +71,7 @@ void Protocol::request_create_game(const std::string& name) {
     oss.put(CreateGameMsg);
     oss << create_text_message(name);
 
-    send_message(oss.str());   
+    send_message(oss.str());
 }
 
 void Protocol::request_join_game(const std::string& name) {
@@ -125,7 +128,7 @@ void Protocol::request_game_move(const PlayerMove& p_move) {
 
 // ======================= SERVER =======================
 
-Protocol::Protocol(Socket&& s) : skt(std::move(s)) {}
+Protocol::Protocol(Socket&& s): skt(std::move(s)) {}
 
 
 Operation Protocol::await_operation() {
@@ -163,7 +166,7 @@ void Protocol::send_game_list(const std::vector<std::string>& g_list) {
     std::ostringstream oss;
     oss << "Partidas:\n";
 
-    for (const auto& name : g_list) {
+    for (const auto& name: g_list) {
         oss << " - " << name << "\n";
     }
     std::string msg = create_text_message(oss.str());
@@ -206,7 +209,7 @@ PlayerMove Protocol::await_game_move() {
 
     uint8_t col = (coords & ColMask) >> 4;
     uint8_t row = (coords & RowMask);
-    
+
     return PlayerMove(col, row);
 }
 
@@ -216,11 +219,14 @@ void Protocol::send_game_result(const TatetiBoard& g_b, const GameResult res) {
 
     switch (res) {
         case WIN:
-            oss << WinnerMessage; break;
+            oss << WinnerMessage;
+            break;
         case LOSS:
-            oss << LoserMessage; break;
+            oss << LoserMessage;
+            break;
         case TIE:
-            oss << TieMessage; break;
+            oss << TieMessage;
+            break;
     }
     std::string msg = create_text_message(oss.str());
 

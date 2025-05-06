@@ -17,12 +17,13 @@
 #undef _GNU_SOURCE
 #undef GNU_SOURCE
 
-#include <errno.h>
-#include <cstdio>
+#include "liberror.h"
+
 #include <cstdarg>
+#include <cstdio>
 #include <cstring>
 
-#include "liberror.h"
+#include <errno.h>
 
 LibError::LibError(int error_code, const char* fmt, ...) noexcept {
     /* Aquí empieza la magia arcana proveniente de C.
@@ -104,18 +105,16 @@ LibError::LibError(int error_code, const char* fmt, ...) noexcept {
      * y es exactamente lo que queremos: queremos escribir a continuación
      * de lo escrito por `vsnprintf` pisándole el `\0`.
      * */
-    strerror_r(error_code, msg_error+s, sizeof(msg_error)-s);
+    strerror_r(error_code, msg_error + s, sizeof(msg_error) - s);
 
     /*
      * `strerror_r` garantiza que el string termina siempre en un `\0`
      * sin embargo permitime ser un poco paranoico y asegurarme que
      * realmente hay un `\0` al final.
      * */
-    msg_error[sizeof(msg_error)-1] = 0;
+    msg_error[sizeof(msg_error) - 1] = 0;
 }
 
-const char* LibError::what() const noexcept {
-    return msg_error;
-}
+const char* LibError::what() const noexcept { return msg_error; }
 
 LibError::~LibError() {}

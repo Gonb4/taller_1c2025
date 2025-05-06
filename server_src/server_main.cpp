@@ -1,22 +1,22 @@
-#include <string>
 #include <exception>
 #include <iostream>
+#include <string>
 
-#include "game_map.h"
-#include "acceptor_thread.h"
 #include "../common_src/stdio_manager.h"
+
+#include "acceptor_thread.h"
+#include "game_map.h"
 
 int main(int argc, const char* argv[]) {
     try {
 
         if (argc != 2) {
-            std::cerr << "Bad program call. Expected: "
-                      << argv[0] << " <port>\n";
+            std::cerr << "Bad program call. Expected: " << argv[0] << " <port>\n";
             return EXIT_FAILURE;
         }
 
         const std::string port = argv[1];
-        
+
         GameMap game_map;
         AcceptorThread acc_th(port, game_map);
         acc_th.start();
