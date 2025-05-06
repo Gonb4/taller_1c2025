@@ -48,8 +48,8 @@ class AcceptorThread : public Thread {
         AcceptorThread(const std::string& port, GameMap& gm) : skt(port.c_str()), gm_ref(gm) {}
 
         void run() override {
-            while (true) {
-                try {
+            try {
+                while (true) {
                     Socket peer_skt = skt.accept();
                     ClientThread* new_client = new ClientThread(std::move(peer_skt), gm_ref);
                     new_client->start();
@@ -57,9 +57,9 @@ class AcceptorThread : public Thread {
 
                     reap_dead_clients();
 
-                } catch (const LibError& err) { // cierre de server
-                    kill_all_clients();
                 }
+            }  catch (const LibError& err) { // cierre de server
+                kill_all_clients();
             }
         }
 

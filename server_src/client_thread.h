@@ -89,9 +89,11 @@ class ClientThread : public Thread {
                 game_map.leave_game(game_name);
             
             } catch (const std::runtime_error& err) {
-                Tateti& game = game_map.get_game(game_name);
-                game.finish_turn(symbol);
-                game_map.leave_game(game_name);
+                if (in_game) {
+                    Tateti& game = game_map.get_game(game_name);
+                    game.finish_turn(symbol);
+                    game_map.leave_game(game_name);
+                }
             }
         }
 
