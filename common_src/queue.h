@@ -259,7 +259,7 @@ public:
     void push(T* const& val) { return Queue<void*>::push(val); }
 
 
-    T* pop() { return (T*)Queue<void*>::pop(); }
+    T* pop() { return (T*)Queue<void*>::pop(); } // static_cast<T*>()
 
     void close() { return Queue<void*>::close(); }
 
