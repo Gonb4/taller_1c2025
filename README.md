@@ -1,2 +1,11 @@
-# taller_1c2025
-Trabajos prácticos de la materia Taller de Programación (Facultad de Ingeniería - UBA)
+# Asignatura: Taller de Programación (TA045)
+
+### Universidad de Buenos Aires - Facultad de Ingeniería
+
+#### ***Cátedra: Veiga - Di Paola***
+
+Repositorio de trabajos prácticos
+
+## Alumno
+
+### Gonzalo Bustos
